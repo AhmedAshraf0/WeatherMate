@@ -15,4 +15,8 @@
     <string name="current_day">Sat, 5 Aug</string>
     <string name="current_degree">30</string>
     <string name="degree_type"><![CDATA[&#xb0;C]]></string>
+    <string name="degree_symbol"><![CDATA[&#xb0;]]></string>
+    <string name="max_deg">25</string>
+    <string name="min_deg">10</string>
+    <string name="weather_desc">Some Clouds</string>
 </resources>

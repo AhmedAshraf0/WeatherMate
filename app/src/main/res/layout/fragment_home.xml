@@ -27,14 +27,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.96" />
+
         <com.google.android.material.card.MaterialCardView
-            app:layout_constraintStart_toStartOf="@id/v_gl_start"
-            app:layout_constraintEnd_toEndOf="@id/v_gl_end"
-            app:layout_constraintTop_toTopOf="@id/main_container"
-            app:cardCornerRadius="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/teal_200">
+            app:cardBackgroundColor="@color/teal_200"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="@id/v_gl_end"
+            app:layout_constraintStart_toStartOf="@id/v_gl_start"
+            app:layout_constraintTop_toTopOf="@id/main_container">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -91,8 +92,9 @@
 
                 <View
                     android:id="@+id/divider"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
                     android:background="?android:attr/listDivider"
                     android:visibility="invisible"
                     app:layout_constraintEnd_toStartOf="@+id/v_main_card_e_gl"
@@ -106,8 +108,9 @@
                     android:text="@string/current_degree"
                     android:textColor="@color/white"
                     android:textSize="60sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/today_img"
                     app:layout_constraintStart_toStartOf="@+id/v_main_card_s_gl"
-                    app:layout_constraintTop_toBottomOf="@id/divider" />
+                    app:layout_constraintTop_toTopOf="@+id/today_img" />
 
                 <TextView
                     android:id="@+id/tv_degree_type"
@@ -122,13 +125,99 @@
                     app:layout_constraintTop_toTopOf="@+id/tv_current_deg"
                     app:layout_constraintVertical_bias="0.31" />
 
+
                 <ImageView
-                    android:id="@+id/imageView2"
+                    android:id="@+id/today_img"
                     android:layout_width="150dp"
                     android:layout_height="100dp"
                     android:src="@mipmap/img2"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:contentDescription="today_img"
+                    app:layout_constraintEnd_toStartOf="@+id/v_main_card_e_gl"
                     app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+                <View
+                    android:id="@+id/divider2"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="?android:attr/listDivider"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toStartOf="@+id/v_main_card_e_gl"
+                    app:layout_constraintStart_toStartOf="@id/v_main_card_s_gl"
+                    app:layout_constraintTop_toBottomOf="@+id/today_img" />
+
+                <ImageView
+                    android:id="@+id/up_arrow_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="upward arrow img"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_max_deg"
+                    app:layout_constraintStart_toStartOf="@id/v_main_card_s_gl"
+                    app:layout_constraintTop_toTopOf="@+id/tv_max_deg"
+                    app:srcCompat="@drawable/baseline_arrow_upward_24" />
+
+                <TextView
+                    android:id="@+id/tv_max_deg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/max_deg"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toEndOf="@id/up_arrow_img"
+                    app:layout_constraintTop_toBottomOf="@id/divider2" />
+
+                <TextView
+                    android:id="@+id/tv_max_deg_symbol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/degree_symbol"
+                    android:textColor="@color/degree_type"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_max_deg"
+                    app:layout_constraintStart_toEndOf="@+id/tv_max_deg"
+                    app:layout_constraintTop_toTopOf="@+id/tv_max_deg" />
+
+                <ImageView
+                    android:id="@+id/down_arrow_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="downward arrow img"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_min_deg"
+                    app:layout_constraintStart_toEndOf="@id/tv_max_deg_symbol"
+                    app:layout_constraintTop_toTopOf="@+id/tv_min_deg"
+                    app:srcCompat="@drawable/baseline_arrow_downward_24" />
+                <TextView
+                    android:id="@+id/tv_min_deg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/min_deg"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toEndOf="@id/down_arrow_img"
+                    app:layout_constraintTop_toBottomOf="@id/divider2" />
+
+                <TextView
+                    android:id="@+id/tv_min_deg_symbol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/degree_symbol"
+                    android:textColor="@color/degree_type"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_min_deg"
+                    app:layout_constraintStart_toEndOf="@+id/tv_min_deg"
+                    app:layout_constraintTop_toTopOf="@+id/tv_min_deg" />
+
+                <TextView
+                    android:id="@+id/tv_weather_desc"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/weather_desc"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/white"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toStartOf="@+id/v_main_card_e_gl"
+                    app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
