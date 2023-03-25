@@ -41,4 +41,7 @@
     <string name="day_date">3/23</string>
     <string name="day_name">Today</string>
     <string name="daystatus">daystatus</string>
+    <string name="menu_alerts">Alerts</string>
+    <string name="menu_favorites">Favorites</string>
+    <string name="menu_settings">Settings</string>
 </resources>
