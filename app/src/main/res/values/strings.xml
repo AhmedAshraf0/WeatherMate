@@ -36,4 +36,5 @@
     <string name="sunrise">Sunrise</string>
     <string name="sunset">Sunset</string>
     <string name="sunset_val">06:11</string>
+    <string name="current_hour">10 AM</string>
 </resources>
