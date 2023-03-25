@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="main_color">#1B1D4A</color>
+    <color name="degree_type">#F9C813</color>
+    <color name="card_color">#207D7F80</color>
 </resources>
