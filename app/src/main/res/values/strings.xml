@@ -14,6 +14,7 @@
     <string name="today">Today</string>
     <string name="current_day">Sat, 5 Aug</string>
     <string name="current_degree">30</string>
+    <string name="current_degree2">10</string>
     <string name="degree_type">\u2103</string>
     <string name="degree_symbol">\u00B0</string>
     <string name="max_deg">25</string>
@@ -37,4 +38,7 @@
     <string name="sunset">Sunset</string>
     <string name="sunset_val">06:11</string>
     <string name="current_hour">10 AM</string>
+    <string name="day_date">3/23</string>
+    <string name="day_name">Today</string>
+    <string name="daystatus">daystatus</string>
 </resources>
