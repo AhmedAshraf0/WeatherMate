@@ -14,9 +14,12 @@
     <string name="today">Today</string>
     <string name="current_day">Sat, 5 Aug</string>
     <string name="current_degree">30</string>
-    <string name="degree_type"><![CDATA[&#xb0;C]]></string>
-    <string name="degree_symbol"><![CDATA[&#xb0;]]></string>
+    <string name="degree_type">\u2103</string>
+    <string name="degree_symbol">\u00B0</string>
     <string name="max_deg">25</string>
     <string name="min_deg">10</string>
     <string name="weather_desc">Some Clouds</string>
+    <string name="current_location">Gamal Abd Elnasser, Alex</string>
+    <string name="current_time">05:23</string>
+    <string name="feels_like">feels like</string>
 </resources>
