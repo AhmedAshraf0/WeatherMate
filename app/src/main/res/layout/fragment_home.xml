@@ -238,7 +238,7 @@
                     android:id="@+id/tv_current_location"
                     android:layout_width="175dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="@dimen/main_v_margin"
                     android:ellipsize="end"
                     android:maxLines="2"
                     android:text="@string/current_location"
@@ -285,7 +285,7 @@
             android:id="@+id/tv_feels_deg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/main_v_margin"
             android:text="@string/current_degree"
             android:textColor="@color/white"
             android:textSize="18sp"
@@ -300,5 +300,378 @@
             android:textColor="@color/degree_type"
             app:layout_constraintStart_toEndOf="@+id/tv_feels_deg"
             app:layout_constraintTop_toTopOf="@+id/tv_feels_deg" />
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/main_v_margin"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
+            app:layout_constraintStart_toStartOf="@+id/v_gl_start"
+            app:layout_constraintTop_toBottomOf="@+id/tv_feels" />
+
+        <TextView
+            android:id="@+id/tv_title_hourly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/main_v_margin"
+            android:text="@string/hourly_forecast"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/v_gl_start"
+            app:layout_constraintTop_toBottomOf="@+id/divider4" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rec_hourly"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="@dimen/main_v_margin"
+            app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
+            app:layout_constraintStart_toStartOf="@id/v_gl_start"
+            app:layout_constraintTop_toBottomOf="@id/tv_title_hourly" />
+
+        <View
+            android:id="@+id/divider5"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/main_v_margin"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
+            app:layout_constraintStart_toStartOf="@+id/v_gl_start"
+            app:layout_constraintTop_toBottomOf="@+id/rec_hourly" />
+
+        <TextView
+            android:id="@+id/tv_title_days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/main_v_margin"
+            android:text="@string/next_days"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/v_gl_start"
+            app:layout_constraintTop_toBottomOf="@+id/divider5" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rec_next_days"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/main_v_margin"
+            app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
+            app:layout_constraintStart_toStartOf="@id/v_gl_start"
+            app:layout_constraintTop_toBottomOf="@id/tv_title_days" />
+
+        <View
+            android:id="@+id/divider6"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/main_v_margin"
+            android:layout_marginBottom="@dimen/main_v_margin"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
+            app:layout_constraintStart_toStartOf="@+id/v_gl_start"
+            app:layout_constraintTop_toBottomOf="@+id/rec_next_days" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_hum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/card_color"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            android:layout_marginEnd="@dimen/main_v_margin"
+            app:layout_constraintEnd_toStartOf="@+id/card_wind"
+            app:layout_constraintStart_toStartOf="@id/v_gl_start"
+            app:layout_constraintTop_toBottomOf="@id/divider6">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/img_hum"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:src="@mipmap/humidity"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/title_hum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/humidity"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="@+id/img_hum"
+                    app:layout_constraintStart_toStartOf="@+id/img_hum"
+                    app:layout_constraintTop_toBottomOf="@id/img_hum" />
+
+                <TextView
+                    android:id="@+id/hum_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hum_val"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@+id/title_hum"
+                    app:layout_constraintStart_toStartOf="@+id/title_hum"
+                    app:layout_constraintTop_toBottomOf="@id/title_hum" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_wind"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/card_color"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
+            app:layout_constraintStart_toEndOf="@+id/card_hum"
+            app:layout_constraintTop_toBottomOf="@id/divider6">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/img_wind"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:src="@mipmap/wind"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/title_wind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wind_speed"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="@+id/img_wind"
+                    app:layout_constraintStart_toStartOf="@+id/img_wind"
+                    app:layout_constraintTop_toBottomOf="@id/img_wind" />
+
+                <TextView
+                    android:id="@+id/wind_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wind_val"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@+id/title_wind"
+                    app:layout_constraintStart_toStartOf="@+id/title_wind"
+                    app:layout_constraintTop_toBottomOf="@id/title_wind" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_pres"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/card_color"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            android:layout_marginTop="@dimen/main_v_margin"
+            android:layout_marginEnd="@dimen/main_v_margin"
+            app:layout_constraintEnd_toStartOf="@+id/card_cloud"
+            app:layout_constraintStart_toStartOf="@id/v_gl_start"
+            app:layout_constraintTop_toBottomOf="@id/card_hum">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/img_pres"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:src="@mipmap/pressure"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/title_pres"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pressure"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="@+id/img_pres"
+                    app:layout_constraintStart_toStartOf="@+id/img_pres"
+                    app:layout_constraintTop_toBottomOf="@id/img_pres" />
+
+                <TextView
+                    android:id="@+id/pres_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pres_val"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@+id/title_pres"
+                    app:layout_constraintStart_toStartOf="@+id/title_pres"
+                    app:layout_constraintTop_toBottomOf="@id/title_pres" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_cloud"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/card_color"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            android:layout_marginTop="@dimen/main_v_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
+            app:layout_constraintStart_toEndOf="@+id/card_pres"
+            app:layout_constraintTop_toBottomOf="@id/card_wind">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/img_cloud"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:src="@mipmap/clouds"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/title_cloud"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/clouds"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="@+id/img_cloud"
+                    app:layout_constraintStart_toStartOf="@+id/img_cloud"
+                    app:layout_constraintTop_toBottomOf="@id/img_cloud" />
+
+                <TextView
+                    android:id="@+id/cloud_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/clouds_val"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@+id/title_cloud"
+                    app:layout_constraintStart_toStartOf="@+id/title_cloud"
+                    app:layout_constraintTop_toBottomOf="@id/title_cloud" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_sunrise"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/card_color"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            android:layout_marginTop="@dimen/main_v_margin"
+            android:layout_marginEnd="@dimen/main_v_margin"
+            app:layout_constraintEnd_toStartOf="@+id/card_sunset"
+            app:layout_constraintStart_toStartOf="@id/v_gl_start"
+            app:layout_constraintTop_toBottomOf="@id/card_pres">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/img_sunrise"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:src="@mipmap/sunrise"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/title_sunrise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sunrise"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="@+id/img_sunrise"
+                    app:layout_constraintStart_toStartOf="@+id/img_sunrise"
+                    app:layout_constraintTop_toBottomOf="@id/img_sunrise" />
+
+                <TextView
+                    android:id="@+id/sunrise_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sunrise_val"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@+id/title_sunrise"
+                    app:layout_constraintStart_toStartOf="@+id/title_sunrise"
+                    app:layout_constraintTop_toBottomOf="@id/title_sunrise" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_sunset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/card_color"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            android:layout_marginTop="@dimen/main_v_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
+            app:layout_constraintStart_toEndOf="@+id/card_sunrise"
+            app:layout_constraintTop_toBottomOf="@id/card_cloud">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/img_sunset"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:src="@mipmap/sunset"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/title_sunset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sunset"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="@+id/img_sunset"
+                    app:layout_constraintStart_toStartOf="@+id/img_sunset"
+                    app:layout_constraintTop_toBottomOf="@id/img_sunset" />
+
+                <TextView
+                    android:id="@+id/sunset_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sunset_val"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@+id/title_sunset"
+                    app:layout_constraintStart_toStartOf="@+id/title_sunset"
+                    app:layout_constraintTop_toBottomOf="@id/title_sunset" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
