@@ -7,4 +7,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="main_v_margin">8dp</dimen>
     <dimen name="margin_little">4dp</dimen>
+    <dimen name="margin_card_top">10dp</dimen>
 </resources>
