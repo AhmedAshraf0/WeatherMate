@@ -1,4 +1,4 @@
-  package com.example.weathermate
+package com.example.weathermate
 
 import android.Manifest
 import android.content.Context
@@ -33,9 +33,9 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
 
 
-  const val PERMISSION_ID = 10
-  class MainActivity : AppCompatActivity() {
 
+class MainActivity : AppCompatActivity() {
+    private val PERMISSION_ID = 10
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var binding: ActivityMainBinding
@@ -73,12 +73,12 @@ import com.google.android.gms.tasks.OnTokenCanceledListener
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-      override fun onResume() {
-          super.onResume()
-          getLocation()
-      }
+    override fun onResume() {
+        super.onResume()
+        getLocation()
+    }
 
-      private fun isLocationEnable(): Boolean {
+    private fun isLocationEnable(): Boolean {
         //reserve reference of location manager
         //condition could be modified in any case i want
         val locationManager: LocationManager =
@@ -89,9 +89,9 @@ import com.google.android.gms.tasks.OnTokenCanceledListener
 
     private fun getLocation() {
         if (checkPermissions()) {//if permissions available after granting them from the user
-            if (isLocationEnable()){//if any location is available
+            if (isLocationEnable()) {//if any location is available
                 requestNewLocationData()
-            }else{
+            } else {
                 startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
             }
         } else {
@@ -103,7 +103,7 @@ import com.google.android.gms.tasks.OnTokenCanceledListener
     private fun requestNewLocationData() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationClient.getCurrentLocation(
-            Priority.PRIORITY_HIGH_ACCURACY,null
+            Priority.PRIORITY_HIGH_ACCURACY, null
         ).addOnSuccessListener { location: Location? ->
             if (location == null)
                 Toast.makeText(this, "Cannot get location.", Toast.LENGTH_SHORT)
@@ -127,7 +127,10 @@ import com.google.android.gms.tasks.OnTokenCanceledListener
     }
 
     private fun checkPermissions(): Boolean {
-        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+        return ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
             this,
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
