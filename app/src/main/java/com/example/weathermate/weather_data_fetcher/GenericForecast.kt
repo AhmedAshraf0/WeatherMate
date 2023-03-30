@@ -88,7 +88,7 @@ data class DailyForecast(
     @SerializedName("wind_speed") private val windSpeed: Double,
     @SerializedName("wind_gust") private val windGust: Double,
     @SerializedName("wind_deg") private val windDeg: Int,
-    private val rain: WeatherStat,
-    private val snow: WeatherStat,
+    private val rain: Double,
+    private val snow: Double,
     private val weather: List<CurrentWeather>
 )

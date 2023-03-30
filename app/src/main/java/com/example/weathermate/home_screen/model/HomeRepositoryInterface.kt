@@ -5,5 +5,10 @@ import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 interface HomeRepositoryInterface {
-    fun getWeatherData() : Flow<Response<WeatherAPIResponse>>
+    fun getWeatherData(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        lang: String
+    ) : Flow<Response<WeatherAPIResponse>>
 }
