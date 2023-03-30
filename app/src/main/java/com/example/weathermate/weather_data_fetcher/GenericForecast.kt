@@ -1,94 +1,95 @@
 package com.example.weathermate.weather_data_fetcher
 
+import androidx.databinding.InverseMethod
 import com.google.gson.annotations.SerializedName
 
 //Generic means hourly or current or daily - forecast
 
 data class CurrentForecast(
-    @SerializedName("dt") val time: Long,
-    val sunrise: Long,
-    val sunset: Long,
-    val temp: Double,
-    @SerializedName("feels_like") val feelsLike: Double,
-    val pressure: Int,
-    val humidity: Int,
-    @SerializedName("dew_point") val atmosphericTemp: Double,
-    val uvi: Double,
-    val clouds: Int,
-    val visibility: Int,
-    @SerializedName("wind_speed") val windSpeed: Double,
-    @SerializedName("wind_gust") val windGust: Double?,
-    @SerializedName("wind_deg") val windDeg: Int,
-    val rain: WeatherStat?,
-    val snow: WeatherStat?,
-    val weather: List<CurrentWeather>
+    @SerializedName("dt") var time: Long,
+    var sunrise: Long,
+    var sunset: Long,
+    var temp: Double,
+    @SerializedName("feels_like") var feelsLike: Double,
+    var pressure: Int,
+    var humidity: Int,
+    @SerializedName("dew_point") var atmosphericTemp: Double,
+    var uvi: Double,
+    var clouds: Int,
+    var visibility: Int,
+    @SerializedName("wind_speed") var windSpeed: Double,
+    @SerializedName("wind_gust") var windGust: Double?,
+    @SerializedName("wind_deg") var windDeg: Int,
+    var rain: WeatherStat?,
+    var snow: WeatherStat?,
+    var weather: List<CurrentWeather>
 )
 
 data class WeatherStat(//rain - snow
-    @SerializedName("1h") val precipitation: Double
+    @SerializedName("1h") var precipitation: Double
 )
 
 data class CurrentWeather(
-    val id: Int,
-    val main: String,
-    val description: String,
-    val icon: String//icon : 04d
+    var id: Int,
+    var main: String,
+    var description: String,
+    var icon: String//icon : 04d
 )
 
 data class HourlyForecast(
-    @SerializedName("dt") val time: Long,
-    val temp: Double,
-    @SerializedName("feels_like") val feelsLike: Double,
-    val pressure: Int,
-    val humidity: Int,
-    @SerializedName("dew_point") val atmosphericTemp: Double,
-    val uvi: Double,
-    val clouds: Int,
-    val visibility: Int,
-    @SerializedName("wind_speed") val windSpeed: Double,
-    @SerializedName("wind_gust") val windGust: Double?,
-    @SerializedName("wind_deg") val windDeg: Int,
-    @SerializedName("pop") val percentOfProbability: Double,
-    val rain: WeatherStat?,
-    val snow: WeatherStat?,
-    val weather: List<CurrentWeather>
+    @SerializedName("dt") var time: Long,
+    var temp: Double,
+    @SerializedName("feels_like") var feelsLike: Double,
+    var pressure: Int,
+    var humidity: Int,
+    @SerializedName("dew_point") var atmosphericTemp: Double,
+    var uvi: Double,
+    var clouds: Int,
+    var visibility: Int,
+    @SerializedName("wind_speed") var windSpeed: Double,
+    @SerializedName("wind_gust") var windGust: Double?,
+    @SerializedName("wind_deg") var windDeg: Int,
+    @SerializedName("pop") var percentOfProbability: Double,
+    var rain: WeatherStat?,
+    var snow: WeatherStat?,
+    var weather: List<CurrentWeather>
 )
 
 data class TempDetails(
-    val day: Double,
-    val min: Double,
-    val max: Double,
-    val night: Double,
-    val eve: Double,
-    val morn: Double,
+    var day: Double,
+    var min: Double,
+    var max: Double,
+    var night: Double,
+    var eve: Double,
+    var morn: Double,
 )
 
 data class FeelLikeDetails(
-    val day: Double,
-    val night: Double,
-    val eve: Double,
-    val morn: Double,
+    var day: Double,
+    var night: Double,
+    var eve: Double,
+    var morn: Double,
 )
 
 data class DailyForecast(
-    @SerializedName("dt") val time: Long,
-    val sunrise: Long,
-    val sunset: Long,
-    val moonrise: Long,
-    val moonset: Long,
-    val moon_phase: Double,
-    val temp: TempDetails,
-    @SerializedName("feels_like") val feelsLike: FeelLikeDetails,
-    val pressure: Int,
-    val humidity: Int,
-    @SerializedName("dew_point") val atmosphericTemp: Double,
-    val uvi: Double,
-    @SerializedName("pop") val percentOfProbability: Double,
-    val clouds: Int,
-    @SerializedName("wind_speed") val windSpeed: Double,
-    @SerializedName("wind_gust") val windGust: Double,
-    @SerializedName("wind_deg") val windDeg: Int,
-    val rain: Double?,
-    val snow: Double?,
-    val weather: List<CurrentWeather>
+    @SerializedName("dt") var time: Long,
+    var sunrise: Long,
+    var sunset: Long,
+    var moonrise: Long,
+    var moonset: Long,
+    var moon_phase: Double,
+    var temp: TempDetails,
+    @SerializedName("feels_like") var feelsLike: FeelLikeDetails,
+    var pressure: Int,
+    var humidity: Int,
+    @SerializedName("dew_point") var atmosphericTemp: Double,
+    var uvi: Double,
+    @SerializedName("pop") var percentOfProbability: Double,
+    var clouds: Int,
+    @SerializedName("wind_speed") var windSpeed: Double,
+    @SerializedName("wind_gust") var windGust: Double,
+    @SerializedName("wind_deg") var windDeg: Int,
+    var rain: Double?,
+    var snow: Double?,
+    var weather: List<CurrentWeather>
 )

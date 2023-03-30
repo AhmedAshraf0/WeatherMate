@@ -42,29 +42,41 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater)
 
         getLocation()
-        return  _binding.root
+
+        return _binding.root
     }
 
 
-
-    private  fun getWeatherDetails(latitude: Double, longitude: Double, units: String, lang: String) {
+    private fun getWeatherDetails(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        lang: String
+    ) {
         factory =
-            HomeViewModelFactory(HomeRepository.getInstance(ConcreteRemoteSource()), latitude, longitude, units, lang)
+            HomeViewModelFactory(
+                HomeRepository.getInstance(ConcreteRemoteSource()),
+                latitude,
+                longitude,
+                units,
+                lang
+            )
 
-        homeViewModel = ViewModelProvider(this,factory).get(HomeViewModel::class.java)
+        homeViewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
 
         //Start Consuming
         lifecycleScope.launchWhenResumed {
             homeViewModel.responseStateFlow.collectLatest {
-                when(it){
-                    is ApiState.Success ->{
+                when (it) {
+                    is ApiState.Success -> {
                         //progress bar
-                        Log.i(TAG, "getWeatherDetails: ${it.data}")
+                        Log.i(TAG, "getWeatherDetails: ${it.data.locationName}")
+                        _binding.weatherApiResponse = it.data
                     }
-                    is ApiState.Loading ->{
+                    is ApiState.Loading -> {
                         //progress bar
                     }
                     else -> {
@@ -107,7 +119,7 @@ class HomeFragment : Fragment() {
                 Toast.makeText(requireContext(), "Cannot get location.", Toast.LENGTH_SHORT)
                     .show()
             else {
-                getWeatherDetails(35.393528,-119.043732,"metric", "en")
+                getWeatherDetails(location.latitude, location.longitude, "metric", "en")
             }
         }
     }
