@@ -35,9 +35,7 @@ import com.google.android.gms.tasks.OnTokenCanceledListener
 
 
 class MainActivity : AppCompatActivity() {
-    private val PERMISSION_ID = 10
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,68 +69,5 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        getLocation()
-    }
-
-    private fun isLocationEnable(): Boolean {
-        //reserve reference of location manager
-        //condition could be modified in any case i want
-        val locationManager: LocationManager =
-            getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-    }
-
-    private fun getLocation() {
-        if (checkPermissions()) {//if permissions available after granting them from the user
-            if (isLocationEnable()) {//if any location is available
-                requestNewLocationData()
-            } else {
-                startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-            }
-        } else {
-            requestPermissions()
-        }
-    }
-
-    @Suppress("MissingPermission")
-    private fun requestNewLocationData() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationClient.getCurrentLocation(
-            Priority.PRIORITY_HIGH_ACCURACY, null
-        ).addOnSuccessListener { location: Location? ->
-            if (location == null)
-                Toast.makeText(this, "Cannot get location.", Toast.LENGTH_SHORT)
-                    .show()
-            else {
-                Log.i("TAG", "requestNewLocationData: ${location.latitude} ${location.longitude}")
-            }
-        }
-    }
-
-    private fun requestPermissions() {
-        //define permissions i want to check and custom unique permission id
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ),
-            PERMISSION_ID
-        )
-    }
-
-    private fun checkPermissions(): Boolean {
-        return ActivityCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
     }
 }
