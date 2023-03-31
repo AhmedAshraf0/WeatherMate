@@ -82,7 +82,7 @@ class HomeFragment : Fragment() {
                         hourlyAdapter.submitList(it.data.hourlyForecast.take(24))
                         _binding.recHourly.adapter = hourlyAdapter
 
-                        dailyAdapter.submitList(it.data.dailyForecast)
+                        dailyAdapter.submitList(it.data.dailyForecast.drop(0).take(7))
                         _binding.recNextDays.adapter = dailyAdapter
 
                         _binding.progressBar.visibility = View.GONE

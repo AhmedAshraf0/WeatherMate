@@ -15,7 +15,7 @@ fun convertToDate(view : TextView , timestamp: Long) {
 
 @BindingAdapter("convertToTime")
 fun convertToTime(view : TextView ,timestamp: Long) {
-    val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
+    val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
     val date = Date(timestamp * 1000L)
     sdf.timeZone = TimeZone.getDefault()
     view.text = sdf.format(date)
