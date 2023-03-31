@@ -11,31 +11,34 @@ import com.example.weathermate.weather_data_fetcher.HourlyForecast
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HourlyAdapter() : ListAdapter<HourlyForecast,HourlyAdapter.ViewHolder>(MyDiffUtil()){
+class HourlyAdapter() : ListAdapter<HourlyForecast, HourlyAdapter.ViewHolder>(DiffUtilHourly()) {
 
-    inner class ViewHolder (var cardHourlyBinding: CardHourlyBinding)
-        : RecyclerView.ViewHolder(cardHourlyBinding.root)
+    inner class ViewHolder(var cardHourlyBinding: CardHourlyBinding) :
+        RecyclerView.ViewHolder(cardHourlyBinding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
-        = ViewHolder(
-            DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                R.layout.card_hourly,
-                parent,false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(
+        DataBindingUtil.inflate(
+            LayoutInflater.from(parent.context),
+            R.layout.card_hourly,
+            parent, false
         )
+    )
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentHour = getItem(position)
-        holder.cardHourlyBinding.currentImg.setImageResource(R.mipmap.clouds)
 
-        //to check if it's 07 to delete the zero
+        holder.cardHourlyBinding.currentImg.setImageResource(R.mipmap.clouds)
         holder.cardHourlyBinding.currentHour.text = convertToTime(currentHour.time)
         holder.cardHourlyBinding.currentDayDeg.text = currentHour.temp.toInt().toString()
     }
 
-    private fun convertToTime(timestamp: Long) : String{
-        val sdf = SimpleDateFormat("HH", Locale.getDefault())
+    private fun convertToTime(timestamp: Long): String {
+        //hh -> 12-hour format
+        //HH -> 24-hour format
+        //a  -> PM - AM
+        //aa  -> pm - am
+        val sdf = SimpleDateFormat("hh a", Locale.getDefault())
         val date = Date(timestamp * 1000L)
         sdf.timeZone = TimeZone.getDefault()
         return sdf.format(date)

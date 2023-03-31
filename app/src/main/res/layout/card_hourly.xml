@@ -49,8 +49,8 @@
 
             <ImageView
                 android:id="@+id/current_img"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="40dp"
                 app:layout_constraintStart_toStartOf="@+id/v_main_s_gl"
                 app:layout_constraintTop_toBottomOf="@id/h_main_card_s_gl"
@@ -64,6 +64,7 @@
                 android:paddingVertical="6dp"
                 android:text="@string/current_hour"
                 android:textColor="@color/white"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="@id/v_main_s_gl"
                 app:layout_constraintTop_toBottomOf="@id/current_img" />
 

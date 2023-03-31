@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/ScrollViewContent"
+        android:overScrollMode="never"
         android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -227,8 +228,8 @@
                         android:textSize="20sp"
                         app:convertToTime="@{weatherApiResponse.currentForecast.time}"
                         app:layout_constraintBaseline_toBaselineOf="@+id/tv_current_location"
-                        app:layout_constraintEnd_toStartOf="@+id/v_main_card_e_gl"
-                        app:layout_constraintStart_toEndOf="@+id/tv_current_location" />
+                        app:layout_constraintEnd_toEndOf="@+id/tv_weather_desc"
+                        app:layout_constraintEnd_toStartOf="@+id/v_main_card_e_gl" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -323,6 +324,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/main_v_margin"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
                 app:layout_constraintStart_toStartOf="@id/v_gl_start"
                 app:layout_constraintTop_toBottomOf="@id/tv_title_days" />
@@ -383,7 +385,7 @@
                         android:layout_height="wrap_content"
                         android:text="@={Converter.INSTANCE.convertIntToString(weatherApiResponse.currentForecast.humidity)}"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/font_small"
                         app:layout_constraintEnd_toStartOf="@+id/hum_val_per"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintHorizontal_chainStyle="packed"
@@ -396,7 +398,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/percent_symbol"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/font_small"
                         app:layout_constraintBaseline_toBaselineOf="@+id/hum_val"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -448,7 +450,7 @@
                         android:layout_height="wrap_content"
                         android:text="@={Converter.INSTANCE.convertDoubleToString(weatherApiResponse.currentForecast.windSpeed)}"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/font_small"
                         app:layout_constraintEnd_toEndOf="@+id/title_wind"
                         app:layout_constraintEnd_toStartOf="@+id/wind_val_per"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -460,9 +462,10 @@
                         android:id="@+id/wind_val_per"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
                         android:text="@string/km"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/font_small"
                         app:layout_constraintBaseline_toBaselineOf="@+id/wind_val"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -514,7 +517,7 @@
                         android:layout_height="wrap_content"
                         android:text="@={Converter.INSTANCE.convertIntToString(weatherApiResponse.currentForecast.pressure)}"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/font_small"
                         app:layout_constraintEnd_toEndOf="@+id/title_pres"
                         app:layout_constraintStart_toStartOf="@+id/title_pres"
                         app:layout_constraintTop_toBottomOf="@id/title_pres" />
@@ -565,7 +568,7 @@
                         android:layout_height="wrap_content"
                         android:text="@={Converter.INSTANCE.convertIntToString(weatherApiResponse.currentForecast.clouds)}"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/font_small"
                         app:layout_constraintEnd_toStartOf="@+id/cloud_val_per"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintHorizontal_chainStyle="packed"
@@ -578,7 +581,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/percent_symbol"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/font_small"
                         app:layout_constraintBaseline_toBaselineOf="@+id/cloud_val"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -628,7 +631,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/font_small"
                         app:layout_constraintEnd_toEndOf="@+id/title_sunrise"
                         app:layout_constraintStart_toStartOf="@+id/title_sunrise"
                         app:layout_constraintTop_toBottomOf="@id/title_sunrise"
@@ -678,7 +681,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/font_small"
                         app:layout_constraintEnd_toEndOf="@+id/title_sunset"
                         app:layout_constraintStart_toStartOf="@+id/title_sunset"
                         app:layout_constraintTop_toBottomOf="@id/title_sunset"

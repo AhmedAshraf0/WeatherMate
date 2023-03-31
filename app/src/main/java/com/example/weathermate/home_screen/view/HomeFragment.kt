@@ -14,11 +14,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.ui.AppBarConfiguration
 import com.example.weathermate.databinding.FragmentHomeBinding
 import com.example.weathermate.home_screen.model.HomeRepository
 import com.example.weathermate.home_screen.viewmodel.HomeViewModel
@@ -37,14 +35,17 @@ class HomeFragment : Fragment() {
     private lateinit var _binding: FragmentHomeBinding
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var factory: HomeViewModelFactory
-    private lateinit var adapter: HourlyAdapter
+    private lateinit var hourlyAdapter: HourlyAdapter
+    private lateinit var dailyAdapter: DailyAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater)
-        adapter = HourlyAdapter()
+
+        hourlyAdapter = HourlyAdapter()
+        dailyAdapter = DailyAdapter()
 
         getLocation()
 
@@ -74,14 +75,15 @@ class HomeFragment : Fragment() {
             homeViewModel.responseStateFlow.collectLatest {
                 when (it) {
                     is ApiState.Success -> {
-                        //progress bar
                         Log.i(TAG, "getWeatherDetails: ${it.data.locationName}")
-
-                        adapter.submitList(it.data.hourlyForecast.take(24))
 
                         _binding.weatherApiResponse = it.data
 
-                        _binding.recHourly.adapter = adapter
+                        hourlyAdapter.submitList(it.data.hourlyForecast.take(24))
+                        _binding.recHourly.adapter = hourlyAdapter
+
+                        dailyAdapter.submitList(it.data.dailyForecast)
+                        _binding.recNextDays.adapter = dailyAdapter
 
                         _binding.progressBar.visibility = View.GONE
                         _binding.mainGroup.visibility = View.VISIBLE
@@ -91,7 +93,7 @@ class HomeFragment : Fragment() {
                         _binding.mainGroup.visibility = View.GONE
                     }
                     else -> {
-                        //visiblity of whole layout gone
+                        //visiblity of whole layout gone and show error msg
                         Log.i(TAG, "getWeatherDetails: error")
                     }
                 }
