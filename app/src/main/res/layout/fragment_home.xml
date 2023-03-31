@@ -22,8 +22,18 @@
             android:id="@+id/main_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
             android:background="@color/main_color"
             tools:context=".home_screen.view.HomeFragment">
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="350dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/v_gl_start"
@@ -46,6 +56,7 @@
                 app:cardBackgroundColor="@color/card_color"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="@id/v_gl_end"
                 app:layout_constraintStart_toStartOf="@id/v_gl_start"
                 app:layout_constraintTop_toTopOf="@id/main_container">
@@ -100,9 +111,9 @@
                         android:text="@string/current_day"
                         android:textColor="@color/white"
                         android:textSize="18sp"
+                        app:convertToDate="@{weatherApiResponse.currentForecast.time}"
                         app:layout_constraintBaseline_toBaselineOf="@+id/tv_today"
-                        app:layout_constraintEnd_toStartOf="@+id/v_main_card_e_gl"
-                        app:convertToDate="@{weatherApiResponse.currentForecast.time}"/>
+                        app:layout_constraintEnd_toStartOf="@+id/v_main_card_e_gl" />
 
                     <View
                         android:id="@+id/divider"
@@ -119,7 +130,7 @@
                         android:id="@+id/tv_current_deg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@={Converter.INSTANCE.convertDoubleToString(weatherApiResponse.currentForecast.temp)}"
+                        android:text="@={Converter.INSTANCE.convertDoubleToIntString(weatherApiResponse.currentForecast.temp)}"
                         android:textColor="@color/white"
                         android:textSize="60sp"
                         app:layout_constraintBottom_toBottomOf="@+id/today_img"
@@ -159,68 +170,6 @@
                         app:layout_constraintStart_toStartOf="@id/v_main_card_s_gl"
                         app:layout_constraintTop_toBottomOf="@+id/today_img" />
 
-                    <ImageView
-                        android:id="@+id/up_arrow_img"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="upward arrow img"
-                        app:layout_constraintBottom_toBottomOf="@+id/tv_max_deg"
-                        app:layout_constraintStart_toStartOf="@id/v_main_card_s_gl"
-                        app:layout_constraintTop_toTopOf="@+id/tv_max_deg"
-                        app:srcCompat="@drawable/baseline_arrow_upward_24" />
-
-                    <TextView
-                        android:id="@+id/tv_max_deg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/max_deg"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        app:layout_constraintStart_toEndOf="@id/up_arrow_img"
-                        app:layout_constraintTop_toBottomOf="@id/divider2" />
-
-                    <TextView
-                        android:id="@+id/tv_max_deg_symbol"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/degree_symbol"
-                        android:textColor="@color/degree_type"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/tv_max_deg"
-                        app:layout_constraintStart_toEndOf="@+id/tv_max_deg"
-                        app:layout_constraintTop_toTopOf="@+id/tv_max_deg" />
-
-                    <ImageView
-                        android:id="@+id/down_arrow_img"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="downward arrow img"
-                        app:layout_constraintBottom_toBottomOf="@+id/tv_min_deg"
-                        app:layout_constraintStart_toEndOf="@id/tv_max_deg_symbol"
-                        app:layout_constraintTop_toTopOf="@+id/tv_min_deg"
-                        app:srcCompat="@drawable/baseline_arrow_downward_24" />
-
-                    <TextView
-                        android:id="@+id/tv_min_deg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/min_deg"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        app:layout_constraintStart_toEndOf="@id/down_arrow_img"
-                        app:layout_constraintTop_toBottomOf="@id/divider2" />
-
-                    <TextView
-                        android:id="@+id/tv_min_deg_symbol"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/degree_symbol"
-                        android:textColor="@color/degree_type"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/tv_min_deg"
-                        app:layout_constraintStart_toEndOf="@+id/tv_min_deg"
-                        app:layout_constraintTop_toTopOf="@+id/tv_min_deg" />
-
                     <TextView
                         android:id="@+id/tv_weather_desc"
                         android:layout_width="150dp"
@@ -232,7 +181,7 @@
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toStartOf="@+id/v_main_card_e_gl"
-                        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+                        app:layout_constraintTop_toBottomOf="@+id/today_img" />
 
                     <View
                         android:id="@+id/divider3"
@@ -273,11 +222,10 @@
                         android:text="@string/current_time"
                         android:textColor="@color/white"
                         android:textSize="20sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/tv_current_location"
+                        app:convertToTime="@{weatherApiResponse.currentForecast.time}"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/tv_current_location"
                         app:layout_constraintEnd_toStartOf="@+id/v_main_card_e_gl"
-                        app:layout_constraintStart_toEndOf="@+id/tv_current_location"
-                        app:layout_constraintTop_toTopOf="@+id/tv_current_location"
-                        app:convertToTime="@{weatherApiResponse.currentForecast.time}"/>
+                        app:layout_constraintStart_toEndOf="@+id/tv_current_location" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -297,7 +245,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/main_v_margin"
-                android:text="@string/current_degree"
+                android:text="@={Converter.INSTANCE.convertDoubleToIntString(weatherApiResponse.currentForecast.feelsLike)}"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tv_feels"
@@ -390,10 +338,11 @@
                 android:id="@+id/card_hum"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/main_v_margin"
+                android:layout_marginTop="@dimen/main_v_margin"
                 app:cardBackgroundColor="@color/card_color"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
-                android:layout_marginEnd="@dimen/main_v_margin"
                 app:layout_constraintEnd_toStartOf="@+id/card_wind"
                 app:layout_constraintStart_toStartOf="@id/v_gl_start"
                 app:layout_constraintTop_toBottomOf="@id/divider6">
@@ -427,12 +376,26 @@
                         android:id="@+id/hum_val"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/hum_val"
+                        android:text="@={Converter.INSTANCE.convertIntToString(weatherApiResponse.currentForecast.humidity)}"
                         android:textColor="@color/white"
                         android:textSize="18sp"
-                        app:layout_constraintEnd_toEndOf="@+id/title_hum"
-                        app:layout_constraintStart_toStartOf="@+id/title_hum"
+                        app:layout_constraintEnd_toStartOf="@+id/hum_val_per"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/title_hum" />
+
+                    <TextView
+                        android:id="@+id/hum_val_per"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/percent_symbol"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/hum_val"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/hum_val" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -443,6 +406,7 @@
                 app:cardBackgroundColor="@color/card_color"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
+                android:layout_marginTop="@dimen/main_v_margin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
                 app:layout_constraintStart_toEndOf="@+id/card_hum"
@@ -477,12 +441,27 @@
                         android:id="@+id/wind_val"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/wind_val"
+                        android:text="@={Converter.INSTANCE.convertDoubleToString(weatherApiResponse.currentForecast.windSpeed)}"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         app:layout_constraintEnd_toEndOf="@+id/title_wind"
-                        app:layout_constraintStart_toStartOf="@+id/title_wind"
+                        app:layout_constraintEnd_toStartOf="@+id/wind_val_per"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/title_wind" />
+
+                    <TextView
+                        android:id="@+id/wind_val_per"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/km"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/wind_val"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/wind_val" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -490,11 +469,11 @@
                 android:id="@+id/card_pres"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/main_v_margin"
+                android:layout_marginEnd="@dimen/main_v_margin"
                 app:cardBackgroundColor="@color/card_color"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
-                android:layout_marginTop="@dimen/main_v_margin"
-                android:layout_marginEnd="@dimen/main_v_margin"
                 app:layout_constraintEnd_toStartOf="@+id/card_cloud"
                 app:layout_constraintStart_toStartOf="@id/v_gl_start"
                 app:layout_constraintTop_toBottomOf="@id/card_hum">
@@ -528,7 +507,7 @@
                         android:id="@+id/pres_val"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/pres_val"
+                        android:text="@={Converter.INSTANCE.convertIntToString(weatherApiResponse.currentForecast.pressure)}"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         app:layout_constraintEnd_toEndOf="@+id/title_pres"
@@ -541,10 +520,10 @@
                 android:id="@+id/card_cloud"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/main_v_margin"
                 app:cardBackgroundColor="@color/card_color"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
-                android:layout_marginTop="@dimen/main_v_margin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
                 app:layout_constraintStart_toEndOf="@+id/card_pres"
@@ -579,12 +558,26 @@
                         android:id="@+id/cloud_val"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/clouds_val"
+                        android:text="@={Converter.INSTANCE.convertIntToString(weatherApiResponse.currentForecast.clouds)}"
                         android:textColor="@color/white"
                         android:textSize="18sp"
-                        app:layout_constraintEnd_toEndOf="@+id/title_cloud"
-                        app:layout_constraintStart_toStartOf="@+id/title_cloud"
+                        app:layout_constraintEnd_toStartOf="@+id/cloud_val_per"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/title_cloud" />
+
+                    <TextView
+                        android:id="@+id/cloud_val_per"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/percent_symbol"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/cloud_val"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/cloud_val" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -592,11 +585,11 @@
                 android:id="@+id/card_sunrise"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/main_v_margin"
+                android:layout_marginEnd="@dimen/main_v_margin"
                 app:cardBackgroundColor="@color/card_color"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
-                android:layout_marginTop="@dimen/main_v_margin"
-                android:layout_marginEnd="@dimen/main_v_margin"
                 app:layout_constraintEnd_toStartOf="@+id/card_sunset"
                 app:layout_constraintStart_toStartOf="@id/v_gl_start"
                 app:layout_constraintTop_toBottomOf="@id/card_pres">
@@ -629,12 +622,12 @@
                         android:id="@+id/sunrise_val"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/sunrise_val"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         app:layout_constraintEnd_toEndOf="@+id/title_sunrise"
                         app:layout_constraintStart_toStartOf="@+id/title_sunrise"
-                        app:layout_constraintTop_toBottomOf="@id/title_sunrise" />
+                        app:layout_constraintTop_toBottomOf="@id/title_sunrise"
+                        app:convertToTime="@{weatherApiResponse.currentForecast.sunrise}" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -642,10 +635,10 @@
                 android:id="@+id/card_sunset"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/main_v_margin"
                 app:cardBackgroundColor="@color/card_color"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
-                android:layout_marginTop="@dimen/main_v_margin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
                 app:layout_constraintStart_toEndOf="@+id/card_sunrise"
@@ -679,14 +672,21 @@
                         android:id="@+id/sunset_val"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/sunset_val"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         app:layout_constraintEnd_toEndOf="@+id/title_sunset"
                         app:layout_constraintStart_toStartOf="@+id/title_sunset"
-                        app:layout_constraintTop_toBottomOf="@id/title_sunset" />
+                        app:layout_constraintTop_toBottomOf="@id/title_sunset"
+                        app:convertToTime="@{weatherApiResponse.currentForecast.sunset}" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/mainGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:constraint_referenced_ids="v_gl_start,v_gl_end,materialCardView,tv_feels,tv_feels_deg,tv_feels_symb,divider4,tv_title_hourly,rec_hourly,divider5,tv_title_days,rec_next_days,divider6,card_hum,card_wind,card_pres,card_cloud,card_sunrise,card_sunset" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

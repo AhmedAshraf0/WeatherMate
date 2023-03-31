@@ -75,9 +75,12 @@ class HomeFragment : Fragment() {
                         //progress bar
                         Log.i(TAG, "getWeatherDetails: ${it.data.locationName}")
                         _binding.weatherApiResponse = it.data
+                        _binding.progressBar.visibility = View.GONE
+                        _binding.mainGroup.visibility = View.VISIBLE
                     }
                     is ApiState.Loading -> {
-                        //progress bar
+                        _binding.progressBar.visibility = View.VISIBLE
+                        _binding.mainGroup.visibility = View.GONE
                     }
                     else -> {
                         //visiblity of whole layout gone

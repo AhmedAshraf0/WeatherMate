@@ -1,7 +1,6 @@
 package com.example.weathermate.home_screen.viewmodel
 
 import androidx.databinding.InverseMethod
-import java.text.SimpleDateFormat
 import java.util.*
 
 object Converter {
@@ -18,6 +17,18 @@ object Converter {
         }
     }
 
+    @InverseMethod("convertStringToIntDouble")
+    fun convertDoubleToIntString(value: Double): String {
+        return value.toInt().toString()
+    }
+
+    fun convertStringToIntDouble(value: String): Double {
+        return try {
+            value.toDouble()
+        } catch (e: NumberFormatException) {
+            0.0
+        }
+    }
     @InverseMethod("convertStringToDouble")
     fun convertDoubleToString(value: Double): String {
         return value.toString()
