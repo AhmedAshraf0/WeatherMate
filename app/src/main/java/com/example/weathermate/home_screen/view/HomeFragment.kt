@@ -32,17 +32,19 @@ import kotlinx.coroutines.flow.collectLatest
 
 class HomeFragment : Fragment() {
     private val TAG = "HomeFragment"
+    private val PERMISSION_ID = 10
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var _binding: FragmentHomeBinding
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var factory: HomeViewModelFactory
-    private val PERMISSION_ID = 10
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var adapter: HourlyAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater)
+        adapter = HourlyAdapter()
 
         getLocation()
 
@@ -74,7 +76,13 @@ class HomeFragment : Fragment() {
                     is ApiState.Success -> {
                         //progress bar
                         Log.i(TAG, "getWeatherDetails: ${it.data.locationName}")
+
+                        adapter.submitList(it.data.hourlyForecast.take(24))
+
                         _binding.weatherApiResponse = it.data
+
+                        _binding.recHourly.adapter = adapter
+
                         _binding.progressBar.visibility = View.GONE
                         _binding.mainGroup.visibility = View.VISIBLE
                     }
