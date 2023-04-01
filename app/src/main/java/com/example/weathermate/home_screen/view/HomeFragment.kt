@@ -1,6 +1,7 @@
 package com.example.weathermate.home_screen.view
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -20,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.weathermate.databinding.FragmentHomeBinding
+import com.example.weathermate.dialog.MyDialogFragment
 import com.example.weathermate.home_screen.model.HomeRepository
 import com.example.weathermate.home_screen.model.photos
 import com.example.weathermate.home_screen.viewmodel.HomeViewModel
@@ -32,9 +34,11 @@ import com.google.android.gms.location.Priority
 import kotlinx.coroutines.flow.collectLatest
 import java.util.*
 
+
 class HomeFragment : Fragment() {
     private val TAG = "HomeFragment"
     private val PERMISSION_ID = 10
+    private val REQUEST_CODE_MY_DIALOG = 10
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var _binding: FragmentHomeBinding
     private lateinit var homeViewModel: HomeViewModel
@@ -84,13 +88,21 @@ class HomeFragment : Fragment() {
                         _binding.weatherApiResponse = it.data
 
                         val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                        val address =  geocoder.getFromLocation(
+                        val address = geocoder.getFromLocation(
                             it.data.cityLatitude,
                             it.data.cityLongitude,
-                            1) as List<Address>
+                            1
+                        ) as List<Address>
 
-                        _binding.tvCurrentLocation.text = address.get(0).getAddressLine(0).split(",").get(1)
-                        _binding.todayImg.setImageResource(photos.get(it.data.currentForecast.weather.get(0).icon)!!)
+                        _binding.tvCurrentLocation.text =
+                            address.get(0).getAddressLine(0).split(",").get(1)
+                        _binding.todayImg.setImageResource(
+                            photos.get(
+                                it.data.currentForecast.weather.get(
+                                    0
+                                ).icon
+                            )!!
+                        )
 
                         hourlyAdapter.submitList(it.data.hourlyForecast.take(24))
                         _binding.recHourly.adapter = hourlyAdapter
@@ -150,12 +162,11 @@ class HomeFragment : Fragment() {
             Priority.PRIORITY_HIGH_ACCURACY, null
         ).addOnSuccessListener { location: Location? ->
             Log.i(TAG, "requestNewLocationData: success")
-            if (location == null){
+            if (location == null) {
                 Toast.makeText(requireContext(), "Cannot get location.", Toast.LENGTH_SHORT)
                     .show()
                 Log.i(TAG, "requestNewLocationData: null")
-            }
-            else {
+            } else {
                 Log.i(TAG, "requestNewLocationData: ${location.longitude}")
                 getWeatherDetails(location.latitude, location.longitude, "metric", "en")
             }
@@ -180,21 +191,36 @@ class HomeFragment : Fragment() {
         //through this callback fun onRequestPermissionsResult()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         Log.i(TAG, "onRequestPermissionsResult: worked")
+
         if (requestCode == PERMISSION_ID) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted, do something with the location
-                // For example, start a location update service
                 getLocation()
             } else {
-                // Permission denied, show an error message or disable the feature that requires the permission
-                Toast.makeText(requireContext(), "Location permission denied", Toast.LENGTH_SHORT).show()
+                // Permission denied, show an error message
+                val dialogFragment = MyDialogFragment()
+                dialogFragment.show(requireFragmentManager(), "MyDialogFragment")
+                dialogFragment.isCancelable = false
+                dialogFragment.setTargetFragment(this, REQUEST_CODE_MY_DIALOG)
             }
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_CODE_MY_DIALOG && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                Log.i(TAG, "onActivityResult: testing")
+                getLocation()
+            }
+        }
+    }
 
     private fun checkPermissions(): Boolean {
         Log.i(TAG, "checkPermissions: ")
