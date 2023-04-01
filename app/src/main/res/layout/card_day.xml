@@ -87,7 +87,7 @@
                 app:layout_constraintBottom_toTopOf="@id/h_main_card_e_gl"
                 app:layout_constraintStart_toEndOf="@id/barrier2"
                 app:layout_constraintTop_toBottomOf="@id/h_main_card_s_gl"
-                app:srcCompat="@mipmap/test_img" />
+                app:srcCompat="@mipmap/sun" />
 
             <TextView
                 android:id="@+id/maxTemp"

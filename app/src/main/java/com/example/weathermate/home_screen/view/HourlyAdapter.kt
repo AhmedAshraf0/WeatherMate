@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weathermate.R
 import com.example.weathermate.databinding.CardHourlyBinding
+import com.example.weathermate.home_screen.model.photos
 import com.example.weathermate.weather_data_fetcher.HourlyForecast
 import java.text.SimpleDateFormat
 import java.util.*
@@ -28,7 +29,7 @@ class HourlyAdapter() : ListAdapter<HourlyForecast, HourlyAdapter.ViewHolder>(Di
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentHour = getItem(position)
 
-        holder.cardHourlyBinding.currentImg.setImageResource(R.mipmap.clouds)
+        holder.cardHourlyBinding.currentImg.setImageResource(photos.get(currentHour.weather.get(0).icon)!!)
         holder.cardHourlyBinding.currentHour.text = convertToTime(currentHour.time)
         holder.cardHourlyBinding.currentDayDeg.text = currentHour.temp.toInt().toString()
     }

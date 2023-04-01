@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weathermate.R
 import com.example.weathermate.databinding.CardDayBinding
+import com.example.weathermate.home_screen.model.photos
 import com.example.weathermate.weather_data_fetcher.DailyForecast
 import java.text.SimpleDateFormat
 import java.util.*
@@ -29,7 +30,7 @@ class DailyAdapter : ListAdapter<DailyForecast, DailyAdapter.ViewHolder>(DiffUti
         val currentDay = getItem(position)
         holder.cardDayBinding.dayDate.text = convertToDate(currentDay.time)
         holder.cardDayBinding.currentDay.text = convertToDayName(currentDay.time)
-        holder.cardDayBinding.dayStatus.setImageResource(R.mipmap.clouds)
+        holder.cardDayBinding.dayStatus.setImageResource(photos.get(currentDay.weather.get(0).icon)!!)
         holder.cardDayBinding.maxTemp.text = currentDay.temp.max.toInt().toString()
         holder.cardDayBinding.minTemp.text = currentDay.temp.min.toInt().toString()
 

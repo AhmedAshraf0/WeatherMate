@@ -167,7 +167,7 @@
                         android:layout_width="150dp"
                         android:layout_height="100dp"
                         android:contentDescription="today_img"
-                        android:src="@mipmap/img2"
+                        android:src="@mipmap/sun"
                         app:layout_constraintEnd_toStartOf="@+id/v_main_card_e_gl"
                         app:layout_constraintTop_toBottomOf="@+id/divider" />
 

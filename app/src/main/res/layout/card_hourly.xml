@@ -55,7 +55,7 @@
                 app:layout_constraintStart_toStartOf="@+id/v_main_s_gl"
                 app:layout_constraintTop_toBottomOf="@id/h_main_card_s_gl"
                 app:layout_constraintEnd_toStartOf="@id/v_main_e_gl"
-                app:srcCompat="@mipmap/test_img" />
+                app:srcCompat="@mipmap/sun" />
 
             <TextView
                 android:id="@+id/current_hour"

@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
@@ -19,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.weathermate.databinding.FragmentHomeBinding
 import com.example.weathermate.home_screen.model.HomeRepository
+import com.example.weathermate.home_screen.model.photos
 import com.example.weathermate.home_screen.viewmodel.HomeViewModel
 import com.example.weathermate.home_screen.viewmodel.HomeViewModelFactory
 import com.example.weathermate.network.ApiState
@@ -27,6 +30,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import kotlinx.coroutines.flow.collectLatest
+import java.util.*
 
 class HomeFragment : Fragment() {
     private val TAG = "HomeFragment"
@@ -78,6 +82,16 @@ class HomeFragment : Fragment() {
                         Log.i(TAG, "getWeatherDetails: ${it.data.locationName}")
 
                         _binding.weatherApiResponse = it.data
+
+                        val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                        val address =  geocoder.getFromLocation(
+                            it.data.cityLatitude,
+                            it.data.cityLongitude,
+                            1) as List<Address>
+
+                        _binding.tvCurrentLocation.text = address.get(0).getAddressLine(0).split(",").get(1)
+
+                        _binding.todayImg.setImageResource(photos.get(it.data.currentForecast.weather.get(0).icon)!!)
 
                         hourlyAdapter.submitList(it.data.hourlyForecast.take(24))
                         _binding.recHourly.adapter = hourlyAdapter
