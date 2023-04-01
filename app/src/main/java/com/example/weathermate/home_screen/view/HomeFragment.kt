@@ -1,6 +1,7 @@
 package com.example.weathermate.home_screen.view
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -20,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.weathermate.databinding.FragmentHomeBinding
+import com.example.weathermate.dialog.MyDialogFragment
 import com.example.weathermate.home_screen.model.HomeRepository
 import com.example.weathermate.home_screen.model.photos
 import com.example.weathermate.home_screen.viewmodel.HomeViewModel
@@ -32,9 +34,11 @@ import com.google.android.gms.location.Priority
 import kotlinx.coroutines.flow.collectLatest
 import java.util.*
 
+
 class HomeFragment : Fragment() {
     private val TAG = "HomeFragment"
     private val PERMISSION_ID = 10
+    private val REQUEST_CODE_MY_DIALOG = 10
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var _binding: FragmentHomeBinding
     private lateinit var homeViewModel: HomeViewModel
@@ -84,14 +88,21 @@ class HomeFragment : Fragment() {
                         _binding.weatherApiResponse = it.data
 
                         val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                        val address =  geocoder.getFromLocation(
+                        val address = geocoder.getFromLocation(
                             it.data.cityLatitude,
                             it.data.cityLongitude,
-                            1) as List<Address>
+                            1
+                        ) as List<Address>
 
-                        _binding.tvCurrentLocation.text = address.get(0).getAddressLine(0).split(",").get(1)
-
-                        _binding.todayImg.setImageResource(photos.get(it.data.currentForecast.weather.get(0).icon)!!)
+                        _binding.tvCurrentLocation.text =
+                            address.get(0).getAddressLine(0).split(",").get(1)
+                        _binding.todayImg.setImageResource(
+                            photos.get(
+                                it.data.currentForecast.weather.get(
+                                    0
+                                ).icon
+                            )!!
+                        )
 
                         hourlyAdapter.submitList(it.data.hourlyForecast.take(24))
                         _binding.recHourly.adapter = hourlyAdapter
@@ -103,6 +114,7 @@ class HomeFragment : Fragment() {
                         _binding.mainGroup.visibility = View.VISIBLE
                     }
                     is ApiState.Loading -> {
+                        Log.i(TAG, "getWeatherDetails: loading")
                         _binding.progressBar.visibility = View.VISIBLE
                         _binding.mainGroup.visibility = View.GONE
                     }
@@ -118,6 +130,7 @@ class HomeFragment : Fragment() {
     private fun isLocationEnable(): Boolean {
         //reserve reference of location manager
         //condition could be modified in any case i want
+        Log.i(TAG, "isLocationEnable: ")
         val locationManager: LocationManager =
             requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
@@ -125,45 +138,92 @@ class HomeFragment : Fragment() {
     }
 
     private fun getLocation() {
+        Log.i(TAG, "getLocation: ")
         if (checkPermissions()) {//if permissions available after granting them from the user
+            Log.i(TAG, "checkPermissions: enabled")
             if (isLocationEnable()) {//if any location is available
+                Log.i(TAG, "isLocationEnable: enabled")
                 requestNewLocationData()
             } else {
+                Log.i(TAG, "isLocationEnable: not enabled")
                 startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
             }
         } else {
+            Log.i(TAG, "checkPermissions: not enabled")
             requestPermissions()
         }
     }
 
     @Suppress("MissingPermission")
     private fun requestNewLocationData() {
+        Log.i(TAG, "requestNewLocationData: ")
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         fusedLocationClient.getCurrentLocation(
             Priority.PRIORITY_HIGH_ACCURACY, null
         ).addOnSuccessListener { location: Location? ->
-            if (location == null)
+            Log.i(TAG, "requestNewLocationData: success")
+            if (location == null) {
                 Toast.makeText(requireContext(), "Cannot get location.", Toast.LENGTH_SHORT)
                     .show()
-            else {
+                Log.i(TAG, "requestNewLocationData: null")
+            } else {
+                Log.i(TAG, "requestNewLocationData: ${location.longitude}")
                 getWeatherDetails(location.latitude, location.longitude, "metric", "en")
             }
+        }.addOnCanceledListener {
+            Log.i(TAG, "requestNewLocationData: failed")
         }
     }
 
     private fun requestPermissions() {
+        Log.i(TAG, "requestPermissions: ")
         //define permissions i want to check and custom unique permission id
-        ActivityCompat.requestPermissions(
-            requireActivity(),
+
+        //if from activity compat onRequestPermissionsResult is not called and i need it
+        requestPermissions(
             arrayOf(
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ),
             PERMISSION_ID
         )
+        //at this function the prompt is displayed and to check on the action of it
+        //through this callback fun onRequestPermissionsResult()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.i(TAG, "onRequestPermissionsResult: worked")
+
+        if (requestCode == PERMISSION_ID) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, do something with the location
+                getLocation()
+            } else {
+                // Permission denied, show an error message
+                val dialogFragment = MyDialogFragment()
+                dialogFragment.show(requireFragmentManager(), "MyDialogFragment")
+                dialogFragment.isCancelable = false
+                dialogFragment.setTargetFragment(this, REQUEST_CODE_MY_DIALOG)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_CODE_MY_DIALOG && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                Log.i(TAG, "onActivityResult: testing")
+                getLocation()
+            }
+        }
     }
 
     private fun checkPermissions(): Boolean {
+        Log.i(TAG, "checkPermissions: ")
         return ActivityCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.ACCESS_COARSE_LOCATION
