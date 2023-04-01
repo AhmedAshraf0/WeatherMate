@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
@@ -14,13 +16,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.ui.AppBarConfiguration
 import com.example.weathermate.databinding.FragmentHomeBinding
 import com.example.weathermate.home_screen.model.HomeRepository
+import com.example.weathermate.home_screen.model.photos
 import com.example.weathermate.home_screen.viewmodel.HomeViewModel
 import com.example.weathermate.home_screen.viewmodel.HomeViewModelFactory
 import com.example.weathermate.network.ApiState
@@ -29,46 +30,84 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import kotlinx.coroutines.flow.collectLatest
+import java.util.*
 
 class HomeFragment : Fragment() {
     private val TAG = "HomeFragment"
+    private val PERMISSION_ID = 10
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var _binding: FragmentHomeBinding
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var factory: HomeViewModelFactory
-    private val PERMISSION_ID = 10
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var hourlyAdapter: HourlyAdapter
+    private lateinit var dailyAdapter: DailyAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater)
+
+        hourlyAdapter = HourlyAdapter()
+        dailyAdapter = DailyAdapter()
 
         getLocation()
-        return  _binding.root
+
+        return _binding.root
     }
 
 
-
-    private  fun getWeatherDetails(latitude: Double, longitude: Double, units: String, lang: String) {
+    private fun getWeatherDetails(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        lang: String
+    ) {
         factory =
-            HomeViewModelFactory(HomeRepository.getInstance(ConcreteRemoteSource()), latitude, longitude, units, lang)
+            HomeViewModelFactory(
+                HomeRepository.getInstance(ConcreteRemoteSource()),
+                latitude,
+                longitude,
+                units,
+                lang
+            )
 
-        homeViewModel = ViewModelProvider(this,factory).get(HomeViewModel::class.java)
+        homeViewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
 
         //Start Consuming
         lifecycleScope.launchWhenResumed {
             homeViewModel.responseStateFlow.collectLatest {
-                when(it){
-                    is ApiState.Success ->{
-                        //progress bar
-                        Log.i(TAG, "getWeatherDetails: ${it.data}")
+                when (it) {
+                    is ApiState.Success -> {
+                        Log.i(TAG, "getWeatherDetails: ${it.data.locationName}")
+
+                        _binding.weatherApiResponse = it.data
+
+                        val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                        val address =  geocoder.getFromLocation(
+                            it.data.cityLatitude,
+                            it.data.cityLongitude,
+                            1) as List<Address>
+
+                        _binding.tvCurrentLocation.text = address.get(0).getAddressLine(0).split(",").get(1)
+
+                        _binding.todayImg.setImageResource(photos.get(it.data.currentForecast.weather.get(0).icon)!!)
+
+                        hourlyAdapter.submitList(it.data.hourlyForecast.take(24))
+                        _binding.recHourly.adapter = hourlyAdapter
+
+                        dailyAdapter.submitList(it.data.dailyForecast.drop(0).take(7))
+                        _binding.recNextDays.adapter = dailyAdapter
+
+                        _binding.progressBar.visibility = View.GONE
+                        _binding.mainGroup.visibility = View.VISIBLE
                     }
-                    is ApiState.Loading ->{
-                        //progress bar
+                    is ApiState.Loading -> {
+                        _binding.progressBar.visibility = View.VISIBLE
+                        _binding.mainGroup.visibility = View.GONE
                     }
                     else -> {
-                        //visiblity of whole layout gone
+                        //visiblity of whole layout gone and show error msg
                         Log.i(TAG, "getWeatherDetails: error")
                     }
                 }
@@ -107,7 +146,7 @@ class HomeFragment : Fragment() {
                 Toast.makeText(requireContext(), "Cannot get location.", Toast.LENGTH_SHORT)
                     .show()
             else {
-                getWeatherDetails(35.393528,-119.043732,"metric", "en")
+                getWeatherDetails(location.latitude, location.longitude, "metric", "en")
             }
         }
     }
