@@ -1,4 +1,4 @@
-package com.example.weathermate.home_screen.viewmodel
+package com.example.weathermate.utilities
 
 import android.widget.TextView
 import androidx.databinding.BindingAdapter

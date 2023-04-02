@@ -39,10 +39,14 @@ class HomeFragment : Fragment() {
     private val TAG = "HomeFragment"
     private val PERMISSION_ID = 10
     private val REQUEST_CODE_MY_DIALOG = 10
+
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     private lateinit var _binding: FragmentHomeBinding
+
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var factory: HomeViewModelFactory
+
     private lateinit var hourlyAdapter: HourlyAdapter
     private lateinit var dailyAdapter: DailyAdapter
     override fun onCreateView(
@@ -98,7 +102,7 @@ class HomeFragment : Fragment() {
                             address.get(0).getAddressLine(0).split(",").get(1)
                         _binding.todayImg.setImageResource(
                             photos.get(
-                                it.data.currentForecast.weather.get(
+                                it.data.currentForecast!!.weather.get(
                                     0
                                 ).icon
                             )!!
@@ -107,7 +111,7 @@ class HomeFragment : Fragment() {
                         hourlyAdapter.submitList(it.data.hourlyForecast.take(24))
                         _binding.recHourly.adapter = hourlyAdapter
 
-                        dailyAdapter.submitList(it.data.dailyForecast.drop(0).take(7))
+                        dailyAdapter.submitList(it.data.dailyForecast.drop(1).take(7))
                         _binding.recNextDays.adapter = dailyAdapter
 
                         _binding.progressBar.visibility = View.GONE
@@ -119,6 +123,7 @@ class HomeFragment : Fragment() {
                         _binding.mainGroup.visibility = View.GONE
                     }
                     else -> {
+
                         //visiblity of whole layout gone and show error msg
                         Log.i(TAG, "getWeatherDetails: error")
                     }
@@ -215,7 +220,7 @@ class HomeFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_MY_DIALOG && resultCode == Activity.RESULT_OK) {
-            if (data != null) {
+            if (data != null) {//i don't need any data from the intent
                 Log.i(TAG, "onActivityResult: testing")
                 getLocation()
             }

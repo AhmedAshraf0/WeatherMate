@@ -41,12 +41,4 @@ class MyDialogFragment : DialogFragment() {
             activity?.finishAffinity()
         }
     }
-
-    fun cancel(view : View){
-
-    }
-
-    fun navToSettings(view : View){
-
-    }
 }

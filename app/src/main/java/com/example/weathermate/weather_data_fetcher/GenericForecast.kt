@@ -1,7 +1,7 @@
 package com.example.weathermate.weather_data_fetcher
 
-import androidx.databinding.InverseMethod
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 //Generic means hourly or current or daily - forecast
 
@@ -23,18 +23,18 @@ data class CurrentForecast(
     var rain: WeatherStat?,
     var snow: WeatherStat?,
     var weather: List<CurrentWeather>
-)
+) : Serializable
 
 data class WeatherStat(//rain - snow
     @SerializedName("1h") var precipitation: Double
-)
+): Serializable
 
 data class CurrentWeather(
     var id: Int,
     var main: String,
     var description: String,
     var icon: String//icon : 04d
-)
+): Serializable
 
 data class HourlyForecast(
     @SerializedName("dt") var time: Long,
@@ -53,7 +53,7 @@ data class HourlyForecast(
     var rain: WeatherStat?,
     var snow: WeatherStat?,
     var weather: List<CurrentWeather>
-)
+): Serializable
 
 data class TempDetails(
     var day: Double,
@@ -62,14 +62,14 @@ data class TempDetails(
     var night: Double,
     var eve: Double,
     var morn: Double,
-)
+): Serializable
 
 data class FeelLikeDetails(
     var day: Double,
     var night: Double,
     var eve: Double,
     var morn: Double,
-)
+): Serializable
 
 data class DailyForecast(
     @SerializedName("dt") var time: Long,
@@ -92,4 +92,4 @@ data class DailyForecast(
     var rain: Double?,
     var snow: Double?,
     var weather: List<CurrentWeather>
-)
+): Serializable

@@ -20,6 +20,7 @@ class HomeViewModel(
     units: String,
     lang: String
 ) : ViewModel() {
+    private val TAG = "HomeViewModel"
 
     private var _responseStateFlow = MutableStateFlow<ApiState>(ApiState.Loading)
     var responseStateFlow: MutableStateFlow<ApiState> = _responseStateFlow
@@ -42,12 +43,12 @@ class HomeViewModel(
                 lang
             ).catch {
                 _responseStateFlow.value = ApiState.Failure(it)
-                Log.i("HomeFragment", "getWeatherDetails: ${it.message}")
+                Log.i(TAG, "getWeatherDetails: ${it.message}")
             }.collect {
                 if (it.isSuccessful) {
                     _responseStateFlow.value = ApiState.Success(it.body()!!)
                 } else {
-//                    _responseStateFlow.value = ApiState.Failure()
+                    Log.i(TAG, "getWeatherDetails: failed ${it.errorBody().toString()}")
                 }
             }
         }
