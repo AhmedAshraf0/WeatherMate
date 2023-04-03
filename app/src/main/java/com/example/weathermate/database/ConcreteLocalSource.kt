@@ -10,7 +10,7 @@ class ConcreteLocalSource(context: Context): LocalSource {
         WeatherDB.getInstance(context).getWeatherDao()
     }
 
-    override fun getLocalWeatherDetails(): Flow<List<WeatherResponse>> {
+    override fun getLocalWeatherDetails(): List<WeatherResponse>{
         return weatherDao.getLocalWeatherDetails()
     }
 

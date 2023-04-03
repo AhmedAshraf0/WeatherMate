@@ -92,7 +92,7 @@ class HomeFragment : Fragment() {
 
                             //Can be modified using data binding
                             Log.i(TAG, "Room: ${it.data.locationName}")
-                            _binding.tvCurrentLocation.text = it.data.locationName.split(",").get(1)
+                            _binding.tvCurrentLocation.text = it.data.locationName
 
                             _binding.todayImg.setImageResource(
                                 photos.get(
@@ -157,11 +157,13 @@ class HomeFragment : Fragment() {
 
                         //get the complete address
                         it.data.locationName = address.get(0).getAddressLine(0)
+                        Log.i(TAG, "api: ${it.data.locationName}")
 
                         //ROOM
                         homeViewModel.insertWeatherDetails(it.data)
 
                         _binding.tvCurrentLocation.text = it.data.locationName.split(",").get(1)
+                        Log.i(TAG, "api: ${it.data.locationName}")
 
                         _binding.todayImg.setImageResource(
                             photos.get(

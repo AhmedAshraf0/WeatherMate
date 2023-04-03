@@ -41,7 +41,9 @@ class HomeRepository(
     }
 
     override fun getLocalWeatherDetails(): Flow<List<WeatherResponse>> {
-        return concreteLocalSource.getLocalWeatherDetails()
+        return flow{
+            emit(concreteLocalSource.getLocalWeatherDetails())
+        }
     }
 
     override suspend fun insertWeatherDetails(weatherResponse: WeatherResponse) {
