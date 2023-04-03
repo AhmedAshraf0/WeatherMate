@@ -1,4 +1,4 @@
-package com.example.weathermate.home_screen.viewmodel
+package com.example.weathermate.utilities
 
 import androidx.databinding.InverseMethod
 import java.util.*

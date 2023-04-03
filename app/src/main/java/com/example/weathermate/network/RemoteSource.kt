@@ -1,6 +1,6 @@
 package com.example.weathermate.network
 
-import com.example.weathermate.weather_data_fetcher.WeatherAPIResponse
+import com.example.weathermate.weather_data_fetcher.WeatherResponse
 import retrofit2.Response
 
 interface RemoteSource {
@@ -9,5 +9,5 @@ interface RemoteSource {
         longitude: Double,
         units: String = "default",
         lang: String = "en"
-        ): Response<WeatherAPIResponse>
+        ): Response<WeatherResponse>
 }

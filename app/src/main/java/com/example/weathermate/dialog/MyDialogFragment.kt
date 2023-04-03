@@ -14,7 +14,6 @@ import com.example.weathermate.databinding.FragmentDialogBinding
 
 class MyDialogFragment : DialogFragment() {
     lateinit var _binding : FragmentDialogBinding
-    var okClicked = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,13 +39,5 @@ class MyDialogFragment : DialogFragment() {
             Log.i("TAG", "onViewCreated: cancel")
             activity?.finishAffinity()
         }
-    }
-
-    fun cancel(view : View){
-
-    }
-
-    fun navToSettings(view : View){
-
     }
 }
