@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -33,6 +34,7 @@ import com.example.weathermate.home_screen.viewmodel.HomeViewModel
 import com.example.weathermate.home_screen.viewmodel.HomeViewModelFactory
 import com.example.weathermate.network.ApiState
 import com.example.weathermate.network.ConcreteRemoteSource
+import com.example.weathermate.weather_data_fetcher.WeatherResponse
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -44,6 +46,8 @@ class HomeFragment : Fragment() {
     private val TAG = "HomeFragment"
     private val PERMISSION_ID = 10
     private val REQUEST_CODE_MY_DIALOG = 10
+    private lateinit var sharedPreferences : SharedPreferences
+    private  lateinit var editor :SharedPreferences.Editor
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -60,6 +64,9 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater)
+
+        sharedPreferences = getSharedPreferences(requireActivity())
+        editor = sharedPreferences.edit()
 
         hourlyAdapter = HourlyAdapter()
         dailyAdapter = DailyAdapter()
@@ -79,9 +86,82 @@ class HomeFragment : Fragment() {
             getLocation()
         } else {
             Log.i(TAG, "checkForInternet: no")
-            //----------if its first time SharedPreferences-----------
 
-            //get data from room
+            if(sharedPreferences.getInt("first_time",-2) == 1){
+                //---To-Do---------show snakebar requrie wifi
+                Log.i(TAG, "onCreateView: closing app")
+                activity?.finishAffinity()
+            }else if(sharedPreferences.getInt("first_time",-2) == -1){
+                //get data from room
+                getWeatherDetails(false)
+            }else{
+                Log.i(TAG, "onCreateView: Error in shared pref")
+            }
+        }
+        return _binding.root
+    }
+
+
+    private fun getWeatherDetails(
+        onlineData : Boolean,
+        latitude: Double? = null,
+        longitude: Double? = null,
+        units: String? = null,
+        lang: String? = null
+    ) {
+        var weatherResponse : WeatherResponse? = null
+
+        if(onlineData){
+            homeViewModel.getWeatherDetails(latitude!!, longitude!!, units!!, lang!!)
+            //Start Consuming
+            lifecycleScope.launchWhenResumed {
+                homeViewModel.retrofitStateFlow.collectLatest {
+                    when (it) {
+                        is ApiState.Success -> {
+                            //i want to make sure that user received data at least once
+                            //to avoid errors
+                            editor.putBoolean("succeed_once",true)
+                            editor.apply()
+                            Log.i(
+                                TAG,
+                                "getWeatherDetails: ${it.data.locationName}${it.data.cityLatitude}${it.data.cityLongitude}"
+                            )
+
+                            _binding.weatherApiResponse = it.data
+                            weatherResponse = it.data
+
+                            val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                            val address = geocoder.getFromLocation(
+                                it.data.cityLatitude,
+                                it.data.cityLongitude,
+                                1
+                            ) as List<Address>
+
+                            //get the complete address
+                            it.data.locationName = address.get(0).getAddressLine(0)
+                            Log.i(TAG, "api: ${it.data.locationName}")
+
+                            //ROOM
+                            homeViewModel.insertWeatherDetails(it.data)
+
+                            _binding.tvCurrentLocation.text = it.data.locationName.split(",").get(1)
+                            Log.i(TAG, "api: ${it.data.locationName}")
+
+                            onResponseState(it.data)
+                        }
+                        is ApiState.Loading -> {
+                            Log.i(TAG, "getWeatherDetails: loading")
+                            _binding.progressBar.visibility = View.VISIBLE
+                            _binding.mainGroup.visibility = View.GONE
+                        }
+                        is ApiState.Failure -> {
+                            //visiblity of whole layout gone and show error msg
+                            Log.i(TAG, "getWeatherDetails: ${it.msg.printStackTrace()}")
+                        }
+                    }
+                }
+            }
+        }else{
             homeViewModel.getLocalWeatherDetails()
 
             lifecycleScope.launchWhenStarted {
@@ -94,102 +174,19 @@ class HomeFragment : Fragment() {
                             Log.i(TAG, "Room: ${it.data.locationName}")
                             _binding.tvCurrentLocation.text = it.data.locationName
 
-                            _binding.todayImg.setImageResource(
-                                photos.get(
-                                    it.data.currentForecast!!.weather.get(
-                                        0
-                                    ).icon
-                                )!!
-                            )
+                            //can't remember way!
+                            weatherResponse = it.data
 
-                            hourlyAdapter.submitList(it.data.hourlyForecast.take(24))
-                            _binding.recHourly.adapter = hourlyAdapter
-
-                            dailyAdapter.submitList(it.data.dailyForecast.drop(1).take(7))
-                            _binding.recNextDays.adapter = dailyAdapter
-
-                            _binding.progressBar.visibility = View.GONE
-                            _binding.mainGroup.visibility = View.VISIBLE
+                            onResponseState(it.data)
                         }
                         is DbState.Loading ->{
                             Log.i(TAG, "getWeatherDetails: loading")
                             _binding.progressBar.visibility = View.VISIBLE
                             _binding.mainGroup.visibility = View.GONE
                         }
-
                         is DbState.Failure -> {
                             Log.i(TAG, "onCreateView: Failed to get data from room ${it.msg.printStackTrace()}")
                         }
-                    }
-                }
-            }
-        }
-
-        return _binding.root
-    }
-
-
-    private fun getWeatherDetails(
-        latitude: Double,
-        longitude: Double,
-        units: String,
-        lang: String
-    ) {
-        homeViewModel.getWeatherDetails(latitude, longitude, units, lang)
-        //Start Consuming
-        lifecycleScope.launchWhenResumed {
-            homeViewModel.retrofitStateFlow.collectLatest {
-                when (it) {
-                    is ApiState.Success -> {
-                        Log.i(
-                            TAG,
-                            "getWeatherDetails: ${it.data.locationName}${it.data.cityLatitude}${it.data.cityLongitude}"
-                        )
-
-                        _binding.weatherApiResponse = it.data
-
-                        val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                        val address = geocoder.getFromLocation(
-                            it.data.cityLatitude,
-                            it.data.cityLongitude,
-                            1
-                        ) as List<Address>
-
-                        //get the complete address
-                        it.data.locationName = address.get(0).getAddressLine(0)
-                        Log.i(TAG, "api: ${it.data.locationName}")
-
-                        //ROOM
-                        homeViewModel.insertWeatherDetails(it.data)
-
-                        _binding.tvCurrentLocation.text = it.data.locationName.split(",").get(1)
-                        Log.i(TAG, "api: ${it.data.locationName}")
-
-                        _binding.todayImg.setImageResource(
-                            photos.get(
-                                it.data.currentForecast!!.weather.get(
-                                    0
-                                ).icon
-                            )!!
-                        )
-
-                        hourlyAdapter.submitList(it.data.hourlyForecast.take(24))
-                        _binding.recHourly.adapter = hourlyAdapter
-
-                        dailyAdapter.submitList(it.data.dailyForecast.drop(1).take(7))
-                        _binding.recNextDays.adapter = dailyAdapter
-
-                        _binding.progressBar.visibility = View.GONE
-                        _binding.mainGroup.visibility = View.VISIBLE
-                    }
-                    is ApiState.Loading -> {
-                        Log.i(TAG, "getWeatherDetails: loading")
-                        _binding.progressBar.visibility = View.VISIBLE
-                        _binding.mainGroup.visibility = View.GONE
-                    }
-                    is ApiState.Failure -> {
-                        //visiblity of whole layout gone and show error msg
-                        Log.i(TAG, "getWeatherDetails: ${it.msg.printStackTrace()}")
                     }
                 }
             }
@@ -237,7 +234,7 @@ class HomeFragment : Fragment() {
                 Log.i(TAG, "requestNewLocationData: null")
             } else {
                 Log.i(TAG, "requestNewLocationData: ${location.longitude}")
-                getWeatherDetails(location.latitude, location.longitude, "metric", "en")
+                getWeatherDetails(true,location.latitude, location.longitude, "metric", "en")
             }
         }.addOnCanceledListener {
             Log.i(TAG, "requestNewLocationData: failed")
@@ -325,5 +322,29 @@ class HomeFragment : Fragment() {
             @Suppress("DEPRECATION")
             return networkInfo.isConnected
         }
+    }
+
+    private fun getSharedPreferences(context: Context): SharedPreferences {
+        return context.getSharedPreferences("weather_prefs", Context.MODE_PRIVATE)
+    }
+
+    private fun onResponseState(weatherResponse:WeatherResponse){
+            Log.i(TAG, "getWeatherDetails: ")
+            _binding.todayImg.setImageResource(
+                photos.get(
+                    weatherResponse!!.currentForecast!!.weather.get(
+                        0
+                    ).icon
+                )!!
+            )
+
+            hourlyAdapter.submitList(weatherResponse!!.hourlyForecast.take(24))
+            _binding.recHourly.adapter = hourlyAdapter
+
+            dailyAdapter.submitList(weatherResponse!!.dailyForecast.drop(1).take(7))
+            _binding.recNextDays.adapter = dailyAdapter
+
+            _binding.progressBar.visibility = View.GONE
+            _binding.mainGroup.visibility = View.VISIBLE
     }
 }
