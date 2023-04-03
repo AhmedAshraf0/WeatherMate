@@ -1,6 +1,5 @@
 package com.example.weathermate.home_screen.model
 
-import com.example.weathermate.database.ConcreteLocalSource
 import com.example.weathermate.database.LocalSource
 import com.example.weathermate.network.RemoteSource
 import com.example.weathermate.weather_data_fetcher.WeatherResponse

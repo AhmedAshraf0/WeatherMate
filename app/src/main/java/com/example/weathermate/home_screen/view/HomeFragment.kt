@@ -9,6 +9,9 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -61,7 +64,66 @@ class HomeFragment : Fragment() {
         hourlyAdapter = HourlyAdapter()
         dailyAdapter = DailyAdapter()
 
-        getLocation()
+        factory =
+            HomeViewModelFactory(
+                HomeRepository.getInstance(
+                    ConcreteRemoteSource(),
+                    ConcreteLocalSource(requireContext())
+                )
+            )
+
+        homeViewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
+
+        if (checkForInternet(requireContext())) {
+            Log.i(TAG, "checkForInternet: yes")
+            getLocation()
+        } else {
+            Log.i(TAG, "checkForInternet: no")
+            //----------if its first time SharedPreferences-----------
+
+            //get data from room
+            homeViewModel.getLocalWeatherDetails()
+
+            lifecycleScope.launchWhenStarted {
+                homeViewModel.roomStateFlow.collect {
+                    when(it){
+                        is DbState.Success->{
+                            _binding.weatherApiResponse = it.data
+
+                            //Can be modified using data binding
+                            Log.i(TAG, "Room: ${it.data.locationName}")
+                            _binding.tvCurrentLocation.text = it.data.locationName.split(",").get(1)
+
+                            _binding.todayImg.setImageResource(
+                                photos.get(
+                                    it.data.currentForecast!!.weather.get(
+                                        0
+                                    ).icon
+                                )!!
+                            )
+
+                            hourlyAdapter.submitList(it.data.hourlyForecast.take(24))
+                            _binding.recHourly.adapter = hourlyAdapter
+
+                            dailyAdapter.submitList(it.data.dailyForecast.drop(1).take(7))
+                            _binding.recNextDays.adapter = dailyAdapter
+
+                            _binding.progressBar.visibility = View.GONE
+                            _binding.mainGroup.visibility = View.VISIBLE
+                        }
+                        is DbState.Loading ->{
+                            Log.i(TAG, "getWeatherDetails: loading")
+                            _binding.progressBar.visibility = View.VISIBLE
+                            _binding.mainGroup.visibility = View.GONE
+                        }
+
+                        is DbState.Failure -> {
+                            Log.i(TAG, "onCreateView: Failed to get data from room ${it.msg.printStackTrace()}")
+                        }
+                    }
+                }
+            }
+        }
 
         return _binding.root
     }
@@ -73,31 +135,18 @@ class HomeFragment : Fragment() {
         units: String,
         lang: String
     ) {
-        factory =
-            HomeViewModelFactory(
-                HomeRepository.getInstance(
-                    ConcreteRemoteSource(),
-                    ConcreteLocalSource(requireContext())
-                ),
-                latitude,
-                longitude,
-                units,
-                lang
-            )
-
-        homeViewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
-
+        homeViewModel.getWeatherDetails(latitude, longitude, units, lang)
         //Start Consuming
-        /*lifecycleScope.launchWhenResumed {
+        lifecycleScope.launchWhenResumed {
             homeViewModel.retrofitStateFlow.collectLatest {
                 when (it) {
                     is ApiState.Success -> {
-                        Log.i(TAG, "getWeatherDetails: ${it.data.locationName}")
+                        Log.i(
+                            TAG,
+                            "getWeatherDetails: ${it.data.locationName}${it.data.cityLatitude}${it.data.cityLongitude}"
+                        )
 
-//                        _binding.weatherApiResponse = it.data
-
-                        //into room
-//                        homeViewModel.insertWeatherDetails(it.data)
+                        _binding.weatherApiResponse = it.data
 
                         val geocoder = Geocoder(requireContext(), Locale.getDefault())
                         val address = geocoder.getFromLocation(
@@ -106,8 +155,14 @@ class HomeFragment : Fragment() {
                             1
                         ) as List<Address>
 
-                        _binding.tvCurrentLocation.text =
-                            address.get(0).getAddressLine(0).split(",").get(1)
+                        //get the complete address
+                        it.data.locationName = address.get(0).getAddressLine(0)
+
+                        //ROOM
+                        homeViewModel.insertWeatherDetails(it.data)
+
+                        _binding.tvCurrentLocation.text = it.data.locationName.split(",").get(1)
+
                         _binding.todayImg.setImageResource(
                             photos.get(
                                 it.data.currentForecast!!.weather.get(
@@ -130,52 +185,10 @@ class HomeFragment : Fragment() {
                         _binding.progressBar.visibility = View.VISIBLE
                         _binding.mainGroup.visibility = View.GONE
                     }
-                    else -> {
-
+                    is ApiState.Failure -> {
                         //visiblity of whole layout gone and show error msg
-                        Log.i(TAG, "getWeatherDetails: error")
+                        Log.i(TAG, "getWeatherDetails: ${it.msg.printStackTrace()}")
                     }
-                }
-            }
-        }*/
-
-        //into room
-//                        homeViewModel.insertWeatherDetails(it.data)
-        homeViewModel.getLocalWeatherDetails()
-        lifecycleScope.launchWhenStarted {
-            homeViewModel.roomStateFlow.collect {
-                if (it is DbState.Success) {
-                    _binding.weatherApiResponse = it.data
-                    val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                    val address = geocoder.getFromLocation(
-                        it.data.cityLatitude,
-                        it.data.cityLongitude,
-                        1
-                    ) as List<Address>
-
-                    _binding.tvCurrentLocation.text =
-                        address.get(0).getAddressLine(0).split(",").get(1)
-                    _binding.todayImg.setImageResource(
-                        photos.get(
-                            it.data.currentForecast!!.weather.get(
-                                0
-                            ).icon
-                        )!!
-                    )
-
-                    hourlyAdapter.submitList(it.data.hourlyForecast.take(24))
-                    _binding.recHourly.adapter = hourlyAdapter
-
-                    dailyAdapter.submitList(it.data.dailyForecast.drop(1).take(7))
-                    _binding.recNextDays.adapter = dailyAdapter
-
-                    _binding.progressBar.visibility = View.GONE
-                    _binding.mainGroup.visibility = View.VISIBLE
-                } else {
-                    Log.i(TAG, "getWeatherDetails: loading")
-                    _binding.progressBar.visibility = View.VISIBLE
-                    _binding.mainGroup.visibility = View.GONE
-
                 }
             }
         }
@@ -285,5 +298,30 @@ class HomeFragment : Fragment() {
             requireContext(),
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun checkForInternet(context: Context): Boolean {
+        //connectivityManager to get system services so i can know network connections
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            val network = connectivityManager.activeNetwork ?: return false
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return when {
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+                else -> false
+            }
+        } else {
+            @Suppress("DEPRECATION") val networkInfo =
+                connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
     }
 }

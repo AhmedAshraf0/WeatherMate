@@ -16,10 +16,6 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val _repo: HomeRepositoryInterface,
-    latitude: Double,
-    longitude: Double,
-    units: String,
-    lang: String
 ) : ViewModel() {
     private val TAG = "HomeViewModel"
 
@@ -28,11 +24,8 @@ class HomeViewModel(
 
     private var _roomStateFlow = MutableStateFlow<DbState>(DbState.Loading)
     var roomStateFlow: MutableStateFlow<DbState> = _roomStateFlow
-    init {
-        getWeatherDetails(latitude, longitude, units, lang)
-    }
 
-    private fun getWeatherDetails(
+    fun getWeatherDetails(
         latitude: Double,
         longitude: Double,
         units: String,
