@@ -20,6 +20,8 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.weathermate.database.ConcreteLocalSource
+import com.example.weathermate.database.DbState
 import com.example.weathermate.databinding.FragmentHomeBinding
 import com.example.weathermate.dialog.MyDialogFragment
 import com.example.weathermate.home_screen.model.HomeRepository
@@ -73,7 +75,10 @@ class HomeFragment : Fragment() {
     ) {
         factory =
             HomeViewModelFactory(
-                HomeRepository.getInstance(ConcreteRemoteSource()),
+                HomeRepository.getInstance(
+                    ConcreteRemoteSource(),
+                    ConcreteLocalSource(requireContext())
+                ),
                 latitude,
                 longitude,
                 units,
@@ -83,13 +88,16 @@ class HomeFragment : Fragment() {
         homeViewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
 
         //Start Consuming
-        lifecycleScope.launchWhenResumed {
-            homeViewModel.responseStateFlow.collectLatest {
+        /*lifecycleScope.launchWhenResumed {
+            homeViewModel.retrofitStateFlow.collectLatest {
                 when (it) {
                     is ApiState.Success -> {
                         Log.i(TAG, "getWeatherDetails: ${it.data.locationName}")
 
-                        _binding.weatherApiResponse = it.data
+//                        _binding.weatherApiResponse = it.data
+
+                        //into room
+//                        homeViewModel.insertWeatherDetails(it.data)
 
                         val geocoder = Geocoder(requireContext(), Locale.getDefault())
                         val address = geocoder.getFromLocation(
@@ -127,6 +135,47 @@ class HomeFragment : Fragment() {
                         //visiblity of whole layout gone and show error msg
                         Log.i(TAG, "getWeatherDetails: error")
                     }
+                }
+            }
+        }*/
+
+        //into room
+//                        homeViewModel.insertWeatherDetails(it.data)
+        homeViewModel.getLocalWeatherDetails()
+        lifecycleScope.launchWhenStarted {
+            homeViewModel.roomStateFlow.collect {
+                if (it is DbState.Success) {
+                    _binding.weatherApiResponse = it.data
+                    val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                    val address = geocoder.getFromLocation(
+                        it.data.cityLatitude,
+                        it.data.cityLongitude,
+                        1
+                    ) as List<Address>
+
+                    _binding.tvCurrentLocation.text =
+                        address.get(0).getAddressLine(0).split(",").get(1)
+                    _binding.todayImg.setImageResource(
+                        photos.get(
+                            it.data.currentForecast!!.weather.get(
+                                0
+                            ).icon
+                        )!!
+                    )
+
+                    hourlyAdapter.submitList(it.data.hourlyForecast.take(24))
+                    _binding.recHourly.adapter = hourlyAdapter
+
+                    dailyAdapter.submitList(it.data.dailyForecast.drop(1).take(7))
+                    _binding.recNextDays.adapter = dailyAdapter
+
+                    _binding.progressBar.visibility = View.GONE
+                    _binding.mainGroup.visibility = View.VISIBLE
+                } else {
+                    Log.i(TAG, "getWeatherDetails: loading")
+                    _binding.progressBar.visibility = View.VISIBLE
+                    _binding.mainGroup.visibility = View.GONE
+
                 }
             }
         }
@@ -211,7 +260,7 @@ class HomeFragment : Fragment() {
             } else {
                 // Permission denied, show an error message
                 val dialogFragment = MyDialogFragment()
-                dialogFragment.show(requireFragmentManager(), "MyDialogFragment")
+                dialogFragment.show(parentFragmentManager, "MyDialogFragment")
                 dialogFragment.isCancelable = false
                 dialogFragment.setTargetFragment(this, REQUEST_CODE_MY_DIALOG)
             }

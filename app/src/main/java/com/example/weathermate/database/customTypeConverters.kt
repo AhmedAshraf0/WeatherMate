@@ -51,7 +51,7 @@ class HourlyListConverter{
     }
 
     @TypeConverter
-    fun toJson(list: List<HourlyForecast>) : String = gson.toString()
+    fun toJson(list: List<HourlyForecast>) : String = gson.toJson(list)
 }
 
 class TempDetailsConverter{
@@ -82,5 +82,5 @@ class DailyListConverter{
     }
 
     @TypeConverter
-    fun toJson(list: List<DailyForecast>) : String = gson.toString()
+    fun toJson(list: List<DailyForecast>) : String = gson.toJson(list)
 }

@@ -1,18 +1,15 @@
 package com.example.weathermate.database
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.example.weathermate.weather_data_fetcher.WeatherResponse
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WeatherDao {
-    @Query("Select * from weather")
+    @Query("SELECT * FROM weather")
     fun getLocalWeatherDetails() : Flow<List<WeatherResponse>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWeatherDetails(weatherResponse: WeatherResponse)
 
     @Update
