@@ -12,14 +12,18 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.weathermate.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
+        android:id="@+id/nav_favs"
+        android:name="com.example.weathermate.favorites.FavoritesFragment"
+        android:label="@string/fragment_favorites"
+        tools:layout="@layout/fragment_favorites" />
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.weathermate.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_settings"
+        android:name="com.example.weathermate.settings.SettingsFragment"
+        android:label="@string/fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/nav_alerts"
+        android:name="com.example.weathermate.alerts.AlertsFragment"
+        android:label="@string/fragment_alerts"
+        tools:layout="@layout/fragment_alerts" />
 </navigation>

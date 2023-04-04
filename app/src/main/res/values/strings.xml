@@ -2,7 +2,7 @@
     <string name="app_name">WeatherMate</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_title">Weather Mate</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
@@ -52,4 +52,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="thinking_face">thinking face</string>
     <string name="use_location_service">Use location service?</string>
+    <string name="fragment_settings">Settings</string>
+    <string name="fragment_alerts">Alerts</string>
+    <string name="fragment_favorites">Favorites</string>
 </resources>

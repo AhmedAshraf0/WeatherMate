@@ -28,9 +28,11 @@ class MainActivity : AppCompatActivity() {
         //should be before binding
         val sharedPreferences = getSharedPreferences(this)
         val editor = sharedPreferences.edit()
+
         //if 0 -> yes first and no shared saved so that's default value
         //if 1 -> yes user entered once before there is shared saved
         //if-1 -> no it's not first time
+
         if(sharedPreferences.getInt("first_time",0) == 0){
             Log.i("Home", "onCreate: 1")
             editor.putInt("first_time", 1)
@@ -50,21 +52,14 @@ class MainActivity : AppCompatActivity() {
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+                R.id.nav_home, R.id.nav_alerts, R.id.nav_favs, R.id.nav_settings
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        return true
     }
 
     override fun onSupportNavigateUp(): Boolean {
