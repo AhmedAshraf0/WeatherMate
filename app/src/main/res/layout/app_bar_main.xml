@@ -24,6 +24,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:title="Weather Mate"
+                app:navigationIcon="@null"
                 app:popupTheme="@style/Theme.WeatherMate.PopupOverlay" />
 
         </com.google.android.material.appbar.AppBarLayout>

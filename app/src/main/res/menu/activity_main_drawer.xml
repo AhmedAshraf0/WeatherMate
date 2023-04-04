@@ -9,7 +9,7 @@
             android:icon="@drawable/baseline_home_24"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_alerts"
             android:icon="@drawable/baseline_add_alert_24"
             android:title="@string/menu_alerts" />
         <item
