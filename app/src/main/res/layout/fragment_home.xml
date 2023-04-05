@@ -483,7 +483,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="2dp"
                         android:fontFamily="@font/rubik"
-                        android:text="@string/km"
+                        android:text="@string/wind_unit"
                         android:textColor="@color/white"
                         android:textSize="@dimen/font_small"
                         app:layout_constraintBaseline_toBaselineOf="@+id/wind_val"
@@ -534,6 +534,20 @@
                         app:layout_constraintTop_toBottomOf="@id/img_pres" />
 
                     <TextView
+                        android:id="@+id/pers_val_symbol"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik"
+                        android:text="@string/pressure_unit"
+                        android:textColor="@color/white"
+                        android:layout_marginStart="2dp"
+                        android:textSize="@dimen/font_small"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/pres_val"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/pres_val" />
+
+                    <TextView
                         android:id="@+id/pres_val"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -542,7 +556,10 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/font_small"
                         app:layout_constraintEnd_toEndOf="@+id/title_pres"
-                        app:layout_constraintStart_toStartOf="@+id/title_pres"
+                        app:layout_constraintEnd_toStartOf="@+id/pers_val_symbol"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/title_pres" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -726,7 +743,7 @@
                 android:id="@+id/mainGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:constraint_referenced_ids="v_gl_start,v_gl_end,materialCardView,tv_feels,tv_feels_deg,tv_feels_symb,divider4,tv_title_hourly,rec_hourly,divider5,tv_title_days,rec_next_days,divider6,card_hum,card_wind,card_pres,card_cloud,card_sunrise,card_sunset" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

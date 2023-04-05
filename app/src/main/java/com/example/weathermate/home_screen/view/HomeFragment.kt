@@ -63,6 +63,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.i(TAG, "onCreateView: ")
         _binding = FragmentHomeBinding.inflate(inflater)
 
         sharedPreferences = getSharedPreferences(requireActivity())
@@ -234,7 +235,12 @@ class HomeFragment : Fragment() {
                 Log.i(TAG, "requestNewLocationData: null")
             } else {
                 Log.i(TAG, "requestNewLocationData: ${location.longitude}")
-                getWeatherDetails(true,location.latitude, location.longitude, "metric", "en")
+                getWeatherDetails(true,
+                    location.latitude,
+                    location.longitude,
+                    sharedPreferences.getString("units","standard"),
+                    sharedPreferences.getString("lang","en")
+                )
             }
         }.addOnCanceledListener {
             Log.i(TAG, "requestNewLocationData: failed")
@@ -346,5 +352,10 @@ class HomeFragment : Fragment() {
 
             _binding.progressBar.visibility = View.GONE
             _binding.mainGroup.visibility = View.VISIBLE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i(TAG, "onDestroy: ")
     }
 }

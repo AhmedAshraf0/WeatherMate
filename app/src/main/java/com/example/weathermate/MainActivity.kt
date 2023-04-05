@@ -28,6 +28,10 @@ class MainActivity : AppCompatActivity() {
         //should be before binding
         val sharedPreferences = getSharedPreferences(this)
         val editor = sharedPreferences.edit()
+        editor.putBoolean("is_gps",true)
+        editor.putString("units","metric")//m/s | celsius
+        editor.putString("lang","en")
+        editor.apply()
 
         //if 0 -> yes first and no shared saved so that's default value
         //if 1 -> yes user entered once before there is shared saved
