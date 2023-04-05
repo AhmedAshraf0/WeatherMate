@@ -152,11 +152,14 @@ class HomeFragment : Fragment() {
                         }
                         is ApiState.Loading -> {
                             Log.i(TAG, "getWeatherDetails: loading")
+                            _binding.progressBar.playAnimation()
                             _binding.progressBar.visibility = View.VISIBLE
                             _binding.mainGroup.visibility = View.GONE
                         }
                         is ApiState.Failure -> {
-                            //visiblity of whole layout gone and show error msg
+                            //---visiblity of whole layout gone and show error msg
+
+                            _binding.progressBar.pauseAnimation()
                             Log.i(TAG, "getWeatherDetails: ${it.msg.printStackTrace()}")
                         }
                     }
@@ -182,10 +185,12 @@ class HomeFragment : Fragment() {
                         }
                         is DbState.Loading ->{
                             Log.i(TAG, "getWeatherDetails: loading")
+                            _binding.progressBar.playAnimation()
                             _binding.progressBar.visibility = View.VISIBLE
                             _binding.mainGroup.visibility = View.GONE
                         }
                         is DbState.Failure -> {
+                            _binding.progressBar.pauseAnimation()
                             Log.i(TAG, "onCreateView: Failed to get data from room ${it.msg.printStackTrace()}")
                         }
                     }
@@ -352,6 +357,7 @@ class HomeFragment : Fragment() {
 
             _binding.progressBar.visibility = View.GONE
             _binding.mainGroup.visibility = View.VISIBLE
+            _binding.progressBar.pauseAnimation()
     }
 
     override fun onDestroy() {

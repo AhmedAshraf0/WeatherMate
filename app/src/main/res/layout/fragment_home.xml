@@ -33,14 +33,18 @@
             android:paddingBottom="10dp"
             tools:context=".home_screen.view.HomeFragment">
 
-            <ProgressBar
+            <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="350dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_width="150dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="232dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="@id/v_gl_end"
+                app:layout_constraintStart_toStartOf="@id/v_gl_start"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="lottie_progress_bar.json"
+                app:lottie_speed="2" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/v_gl_start"
@@ -743,7 +747,7 @@
                 android:id="@+id/mainGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:constraint_referenced_ids="v_gl_start,v_gl_end,materialCardView,tv_feels,tv_feels_deg,tv_feels_symb,divider4,tv_title_hourly,rec_hourly,divider5,tv_title_days,rec_next_days,divider6,card_hum,card_wind,card_pres,card_cloud,card_sunrise,card_sunset" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
