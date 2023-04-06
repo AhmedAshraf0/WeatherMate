@@ -46,8 +46,8 @@ class HomeFragment : Fragment() {
     private val TAG = "HomeFragment"
     private val PERMISSION_ID = 10
     private val REQUEST_CODE_MY_DIALOG = 10
-    private lateinit var sharedPreferences : SharedPreferences
-    private  lateinit var editor :SharedPreferences.Editor
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -88,14 +88,14 @@ class HomeFragment : Fragment() {
         } else {
             Log.i(TAG, "checkForInternet: no")
 
-            if(sharedPreferences.getInt("first_time",-2) == 1){
+            if (sharedPreferences.getInt("first_time", -2) == 1) {
                 //---To-Do---------show snakebar requrie wifi
                 Log.i(TAG, "onCreateView: closing app")
                 activity?.finishAffinity()
-            }else if(sharedPreferences.getInt("first_time",-2) == -1){
+            } else if (sharedPreferences.getInt("first_time", -2) == -1) {
                 //get data from room
                 getWeatherDetails(false)
-            }else{
+            } else {
                 Log.i(TAG, "onCreateView: Error in shared pref")
             }
         }
@@ -104,15 +104,15 @@ class HomeFragment : Fragment() {
 
 
     private fun getWeatherDetails(
-        onlineData : Boolean,
+        onlineData: Boolean,
         latitude: Double? = null,
         longitude: Double? = null,
         units: String? = null,
         lang: String? = null
     ) {
-        var weatherResponse : WeatherResponse? = null
+        var weatherResponse: WeatherResponse? = null
 
-        if(onlineData){
+        if (onlineData) {
             homeViewModel.getWeatherDetails(latitude!!, longitude!!, units!!, lang!!)
             //Start Consuming
             lifecycleScope.launchWhenResumed {
@@ -121,7 +121,7 @@ class HomeFragment : Fragment() {
                         is ApiState.Success -> {
                             //i want to make sure that user received data at least once
                             //to avoid errors
-                            editor.putBoolean("succeed_once",true)
+                            editor.putBoolean("succeed_once", true)
                             editor.apply()
                             Log.i(
                                 TAG,
@@ -139,17 +139,28 @@ class HomeFragment : Fragment() {
                             ) as List<Address>
 
                             //get the complete address
-                            it.data.locationName = address.get(0).getAddressLine(0)
+                            try {
+                                //swap location from api to location from geocoder
+                                it.data.locationName = address.get(0).getAddressLine(0)
+                            }catch (e: IndexOutOfBoundsException){
+                                it.data.locationName = "-"
+                                Log.i(TAG, "getWeatherDetails: ----${address.size}")
+                            }
                             Log.i(TAG, "api: ${it.data.locationName}")
 
                             //ROOM
                             homeViewModel.insertWeatherDetails(it.data)
 
-                            if(getSharedPreferences(requireActivity()).getString("lang","en").equals("en"))
-                                _binding.tvCurrentLocation.text = it.data.locationName.split(",").get(1)
-                            else
-                                _binding.tvCurrentLocation.text = it.data.locationName
-                            Log.i(TAG, "api: ${it.data.locationName}")
+                            if (getSharedPreferences(requireActivity()).getString("lang", "en")
+                                    .equals("en")) {
+                                try{
+                                    _binding.tvCurrentLocation.text =
+                                        it.data.locationName.split(",").get(1)
+                                }catch (e : IndexOutOfBoundsException){
+
+                                    _binding.tvCurrentLocation.text = it.data.locationName
+                                }
+                            }
 
                             onResponseState(it.data)
                         }
@@ -163,18 +174,18 @@ class HomeFragment : Fragment() {
                             //---visiblity of whole layout gone and show error msg
 
                             _binding.progressBar.pauseAnimation()
-                            Log.i(TAG, "getWeatherDetails: ${it.msg.printStackTrace()}")
+                            Log.i(TAG, "getWeatherDetails: error: ${it.msg.printStackTrace()}")
                         }
                     }
                 }
             }
-        }else{
+        } else {
             homeViewModel.getLocalWeatherDetails()
 
             lifecycleScope.launchWhenStarted {
                 homeViewModel.roomStateFlow.collect {
-                    when(it){
-                        is DbState.Success->{
+                    when (it) {
+                        is DbState.Success -> {
                             _binding.weatherApiResponse = it.data
 
                             //Can be modified using data binding
@@ -186,7 +197,7 @@ class HomeFragment : Fragment() {
 
                             onResponseState(it.data)
                         }
-                        is DbState.Loading ->{
+                        is DbState.Loading -> {
                             Log.i(TAG, "getWeatherDetails: loading")
                             _binding.progressBar.playAnimation()
                             _binding.progressBar.visibility = View.VISIBLE
@@ -194,7 +205,10 @@ class HomeFragment : Fragment() {
                         }
                         is DbState.Failure -> {
                             _binding.progressBar.pauseAnimation()
-                            Log.i(TAG, "onCreateView: Failed to get data from room ${it.msg.printStackTrace()}")
+                            Log.i(
+                                TAG,
+                                "onCreateView: Failed to get data from room ${it.msg.printStackTrace()}"
+                            )
                         }
                     }
                 }
@@ -218,7 +232,32 @@ class HomeFragment : Fragment() {
             Log.i(TAG, "checkPermissions: enabled")
             if (isLocationEnable()) {//if any location is available
                 Log.i(TAG, "isLocationEnable: enabled")
-                requestNewLocationData()
+
+                //if is_gps = false then location has lat and long then i should
+                //send to api with location from shared
+                if (sharedPreferences.getBoolean("is_gps", true)) {//call using fused lat long
+                    Log.i(TAG, "getLocation: by gps")
+                    requestNewLocationData()
+                } else {//call using latlong of shared pref
+
+                    Log.i(TAG, "getLocation: by map")
+
+                    //-------what's defvalue
+
+                    val latlong = sharedPreferences.getString("location", "")
+
+                    Log.i(TAG, "getLocation: Map ${latlong!!.split(",").get(0)}")
+                    Log.i(TAG, "getLocation: Map ${latlong.split(",").get(1)}")
+
+                    getWeatherDetails(
+                        true,
+                        latlong.split(",").get(0).toDouble(),
+                        latlong.split(",").get(1).toDouble(),
+                        sharedPreferences.getString("units", "standard"),
+                        sharedPreferences.getString("lang", "en")
+                    )
+                }
+
             } else {
                 Log.i(TAG, "isLocationEnable: not enabled")
                 startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
@@ -243,11 +282,12 @@ class HomeFragment : Fragment() {
                 Log.i(TAG, "requestNewLocationData: null")
             } else {
                 Log.i(TAG, "requestNewLocationData: ${location.longitude}")
-                getWeatherDetails(true,
+                getWeatherDetails(
+                    true,
                     location.latitude,
                     location.longitude,
-                    sharedPreferences.getString("units","standard"),
-                    sharedPreferences.getString("lang","en")
+                    sharedPreferences.getString("units", "standard"),
+                    sharedPreferences.getString("lang", "en")
                 )
             }
         }.addOnCanceledListener {
@@ -342,25 +382,25 @@ class HomeFragment : Fragment() {
         return context.getSharedPreferences("weather_prefs", Context.MODE_PRIVATE)
     }
 
-    private fun onResponseState(weatherResponse:WeatherResponse){
-            Log.i(TAG, "getWeatherDetails: ")
-            _binding.todayImg.setImageResource(
-                photos.get(
-                    weatherResponse!!.currentForecast!!.weather.get(
-                        0
-                    ).icon
-                )!!
-            )
+    private fun onResponseState(weatherResponse: WeatherResponse) {
+        Log.i(TAG, "getWeatherDetails: ")
+        _binding.todayImg.setImageResource(
+            photos.get(
+                weatherResponse.currentForecast!!.weather.get(
+                    0
+                ).icon
+            )!!
+        )
 
-            hourlyAdapter.submitList(weatherResponse!!.hourlyForecast.take(24))
-            _binding.recHourly.adapter = hourlyAdapter
+        hourlyAdapter.submitList(weatherResponse.hourlyForecast.take(24))
+        _binding.recHourly.adapter = hourlyAdapter
 
-            dailyAdapter.submitList(weatherResponse!!.dailyForecast.drop(1).take(7))
-            _binding.recNextDays.adapter = dailyAdapter
+        dailyAdapter.submitList(weatherResponse.dailyForecast.drop(1).take(7))
+        _binding.recNextDays.adapter = dailyAdapter
 
-            _binding.progressBar.visibility = View.GONE
-            _binding.mainGroup.visibility = View.VISIBLE
-            _binding.progressBar.pauseAnimation()
+        _binding.progressBar.visibility = View.GONE
+        _binding.mainGroup.visibility = View.VISIBLE
+        _binding.progressBar.pauseAnimation()
     }
 
     override fun onDestroy() {

@@ -37,5 +37,6 @@
     <string name="windSpeed">سرعة الرياح</string>
     <string name="mph">ميل/ساعة\nmph</string>
     <string name="pressure_unit">مبار</string>
+    <string name="map_fragment">اختيار الموقع على الخريطة</string>
 
 </resources>

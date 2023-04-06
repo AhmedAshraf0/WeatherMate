@@ -30,6 +30,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import java.util.*
 import android.content.res.*
+import android.os.Build
+import android.text.TextUtils
 
 
 class SettingsFragment : Fragment() {
@@ -63,17 +65,8 @@ class SettingsFragment : Fragment() {
         }else{
             Log.i(TAG, "onViewCreated: f")
             switchToMap()
-            val navController = Navigation.findNavController(requireActivity(),
-                R.id.nav_host_fragment_content_main)
 
-
-// Navigate to the destination Fragment using the NavGraph and passing any arguments
-            navController.navigate(R.id.action_nav_settings_to_mapFragment)
             if(checkPermissions()){
-                //navigate to map fragment
-                // Get the NavController object from the Fragment's view
-
-
             }else{
                 requestPermissions()
             }
@@ -116,15 +109,18 @@ class SettingsFragment : Fragment() {
         when(view.id){
             _binding.rbMap.id -> {
                 Log.i(TAG, "onRbClicked: rbMap")
-                editor.putBoolean("is_gps",false)
-
                 switchToMap()
+                editor.putBoolean("is_gps",false)
+                editor.apply()
+
+                val navController = Navigation.findNavController(requireActivity(),
+                    R.id.nav_host_fragment_content_main)
+                navController.navigate(R.id.action_nav_settings_to_mapFragment)
             }
             _binding.rbGps.id -> {
                 Log.i(TAG, "onRbClicked: rbGps")
-                editor.putBoolean("is_gps",true)
-
                 switchToGps()
+                editor.putBoolean("is_gps",true)
             }
 
             _binding.rbCelsius.id -> {
@@ -159,6 +155,7 @@ class SettingsFragment : Fragment() {
                 switchToAr()
             }
         }
+        editor.apply()
     }
     private fun getSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences("weather_prefs", Context.MODE_PRIVATE)
@@ -238,6 +235,30 @@ class SettingsFragment : Fragment() {
         editor.putString("lang","ar")
         editor.apply()
     }
+    private fun setLocal(lang : String){
+        val local = Locale(lang)
+        Locale.setDefault(local)
+        val config = Configuration()
+        config.setLocale(local)
+        requireActivity().baseContext.resources.updateConfiguration(config,requireActivity().baseContext.resources.displayMetrics)
+
+        // Determine layout direction based on selected language
+        val layoutDirection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            if (TextUtils.getLayoutDirectionFromLocale(local) == View.LAYOUT_DIRECTION_RTL) {
+                View.LAYOUT_DIRECTION_RTL
+            } else {
+                View.LAYOUT_DIRECTION_LTR
+            }
+        } else {
+            View.LAYOUT_DIRECTION_LTR
+        }
+
+        // Set layout direction on the root view
+        requireActivity().window.decorView.layoutDirection = layoutDirection
+        _binding.tvLanguage.text = resources.getString(R.string.language)
+        _binding.tvLocation.text = resources.getString(R.string.location)
+        _binding.tvTemperature.text = resources.getString(R.string.temperature)
+    }
     private fun checkPermissions(): Boolean {
         Log.i(TAG, "checkPermissions: ")
         return ActivityCompat.checkSelfPermission(
@@ -262,14 +283,6 @@ class SettingsFragment : Fragment() {
         )
         //at this function the prompt is displayed and to check on the action of it
         //through this callback fun onRequestPermissionsResult()
-    }
-
-    private fun setLocal(lang : String){
-        val local = Locale(lang)
-        Locale.setDefault(local)
-        val config = Configuration()
-        config.setLocale(local)
-        requireActivity().baseContext.resources.updateConfiguration(config,requireActivity().baseContext.resources.displayMetrics)
     }
 
     override fun onRequestPermissionsResult(

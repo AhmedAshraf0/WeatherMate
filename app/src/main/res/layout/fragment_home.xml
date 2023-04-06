@@ -747,7 +747,7 @@
                 android:id="@+id/mainGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:constraint_referenced_ids="v_gl_start,v_gl_end,materialCardView,tv_feels,tv_feels_deg,tv_feels_symb,divider4,tv_title_hourly,rec_hourly,divider5,tv_title_days,rec_next_days,divider6,card_hum,card_wind,card_pres,card_cloud,card_sunrise,card_sunset" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

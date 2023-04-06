@@ -28,10 +28,6 @@ class MainActivity : AppCompatActivity() {
         //should be before binding
         val sharedPreferences = getSharedPreferences(this)
         val editor = sharedPreferences.edit()
-        editor.putBoolean("is_gps",true)
-        editor.putString("units","metric")//m/s | celsius
-        editor.putString("lang","en")
-        editor.apply()
 
         //if 0 -> yes first and no shared saved so that's default value
         //if 1 -> yes user entered once before there is shared saved
@@ -40,6 +36,9 @@ class MainActivity : AppCompatActivity() {
         if(sharedPreferences.getInt("first_time",0) == 0){
             Log.i("Home", "onCreate: 1")
             editor.putInt("first_time", 1)
+            editor.putBoolean("is_gps",true)
+            editor.putString("units","metric")//m/s | celsius
+            editor.putString("lang","en")
             editor.apply()
         }else if(sharedPreferences.getInt("first_time",0) == 1 &&
                 sharedPreferences.getBoolean("succeed_once",false)){

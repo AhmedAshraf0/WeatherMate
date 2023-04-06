@@ -33,6 +33,7 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.example.weathermate.map.MapFragment"
-        android:label="fragment_map"
-        tools:layout="@layout/fragment_map" />
+        android:label="@string/map_fragment"
+        tools:layout="@layout/fragment_map" >
+    </fragment>
 </navigation>
