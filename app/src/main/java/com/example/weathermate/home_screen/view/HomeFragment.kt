@@ -145,7 +145,10 @@ class HomeFragment : Fragment() {
                             //ROOM
                             homeViewModel.insertWeatherDetails(it.data)
 
-                            _binding.tvCurrentLocation.text = it.data.locationName.split(",").get(1)
+                            if(getSharedPreferences(requireActivity()).getString("lang","en").equals("en"))
+                                _binding.tvCurrentLocation.text = it.data.locationName.split(",").get(1)
+                            else
+                                _binding.tvCurrentLocation.text = it.data.locationName
                             Log.i(TAG, "api: ${it.data.locationName}")
 
                             onResponseState(it.data)
