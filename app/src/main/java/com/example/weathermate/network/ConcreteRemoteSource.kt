@@ -9,13 +9,15 @@ class ConcreteRemoteSource : RemoteSource{
         latitude: Double,
         longitude: Double,
         units: String,
-        lang: String
+        lang: String,
+        exclude: String
     ): Response<WeatherResponse> {
         return API.retrofitService.getWeatherData(
             lat = latitude,
             lon = longitude,
             units = units,
-            lang = lang
+            lang = lang,
+            exclude = exclude
         )
     }
 

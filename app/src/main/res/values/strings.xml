@@ -69,4 +69,7 @@
     <string name="version" translatable="false">Version 1.0</string>
     <string name="pressure_unit">mb</string>
     <string name="map_fragment">Choosing location</string>
+    <string name="fab" translatable="false">Add new Favorite</string>
+    <string name="no_results" translatable="false">no_results_photo</string>
+    <string name="alexandria" translatable="false">Alexandria</string>
 </resources>

@@ -8,6 +8,7 @@ interface RemoteSource {
         latitude: Double,
         longitude: Double,
         units: String = "default",
-        lang: String = "en"
+        lang: String = "en",
+        exclude: String = "minutely,alerts",
         ): Response<WeatherResponse>
 }

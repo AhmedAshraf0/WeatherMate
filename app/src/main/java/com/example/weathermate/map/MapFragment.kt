@@ -130,7 +130,7 @@ class MapFragment : Fragment() , OnMapReadyCallback{
                             .setMessage("Are you sure you want to choose this location?")
                             .setPositiveButton("Yes") { dialog, which ->
                                 // Return to the previous fragment and pass the selected location
-                                val location = marker!!.position
+                                val location = marker.position
                                 Log.i(
                                     TAG,
                                     "getCurrentLocation: ${location.longitude} ${location.latitude}"

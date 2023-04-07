@@ -1,4 +1,4 @@
-package com.example.weathermate.favorites
+package com.example.weathermate.favorites.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

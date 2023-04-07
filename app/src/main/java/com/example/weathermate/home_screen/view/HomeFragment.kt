@@ -189,7 +189,7 @@ class HomeFragment : Fragment() {
                             _binding.weatherApiResponse = it.data
 
                             //Can be modified using data binding
-                            Log.i(TAG, "Room: ${it.data.locationName}")
+                            Log.i(TAG, "Room: ${it.data!!.locationName}")
                             _binding.tvCurrentLocation.text = it.data.locationName
 
                             //can't remember way!
