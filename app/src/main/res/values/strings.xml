@@ -68,5 +68,5 @@
     <string name="mph">miles/hour\nmph</string>
     <string name="version" translatable="false">Version 1.0</string>
     <string name="pressure_unit">mb</string>
-    <string name="map_fragment">Choosing location on map</string>
+    <string name="map_fragment">Choosing location</string>
 </resources>

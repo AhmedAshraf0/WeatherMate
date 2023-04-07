@@ -87,14 +87,16 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        if(sharedPreferences.getString("lang","non").equals("en")){
+        //---------To upgrade ui
+
+        /*if(sharedPreferences.getString("lang","non").equals("en")){
             Log.i(TAG, "onViewCreated: en in lang")
             switchToEn()
         }else if(sharedPreferences.getString("lang","non").equals("ar")){
             switchToAr()
         }else{
             Log.i(TAG, "onViewCreated: e in lang")
-        }
+        }*/
     }
     fun onRbClicked(view: View){
         //--------units-----
@@ -110,8 +112,6 @@ class SettingsFragment : Fragment() {
             _binding.rbMap.id -> {
                 Log.i(TAG, "onRbClicked: rbMap")
                 switchToMap()
-                editor.putBoolean("is_gps",false)
-                editor.apply()
 
                 val navController = Navigation.findNavController(requireActivity(),
                     R.id.nav_host_fragment_content_main)
@@ -120,42 +120,51 @@ class SettingsFragment : Fragment() {
             _binding.rbGps.id -> {
                 Log.i(TAG, "onRbClicked: rbGps")
                 switchToGps()
-                editor.putBoolean("is_gps",true)
             }
 
             _binding.rbCelsius.id -> {
                 Log.i(TAG, "onRbClicked: rbCelsius")
-                editor.putString("units","metric")
 
                 switchToCelsius()
             }
             _binding.rbFahrenheit.id -> {
                 Log.i(TAG, "onRbClicked: rbFahrenheit")
-                editor.putString("units","imperial")
 
                 switchToFahrenheit()
             }
             _binding.rbKelvin.id -> {
                 Log.i(TAG, "onRbClicked: rbKelvin")
-                editor.putString("units","standard")
 
                 switchToKelvin()
             }
 
             _binding.rbEn.id -> {
                 Log.i(TAG, "onRbClicked: rbEn")
-                editor.putString("lang","en")
+                if(sharedPreferences.getString("lang","en").equals("ar")){
+                    Log.i(TAG, "onRbClicked: in if")
 
-                switchToEn()
+                    switchToEn()
+                    /*val navController = Navigation.findNavController(requireActivity(),
+                        R.id.nav_host_fragment_content_main)
+                    navController.navigate(R.id.action_nav_settings_self)*/
+                }
             }
             _binding.rbAr.id -> {
                 Log.i(TAG, "onRbClicked: rbAr")
-                editor.putString("lang","ar")
+                Log.i(TAG, "onRbClicked: ${sharedPreferences.getString("lang","z")}")
+                if(sharedPreferences.getString("lang","en").equals("en")){
+                    Log.i(TAG, "onRbClicked: in if")
 
-                switchToAr()
+                    switchToAr()
+                    /*val navController = Navigation.findNavController(requireActivity(),
+                        R.id.nav_host_fragment_content_main)
+                    navController.navigate(R.id.action_nav_settings_self)*/
+                }else{
+                    print(sharedPreferences.getString("lang","z"))
+                }
+                Log.i(TAG, "onRbClicked: ${sharedPreferences.getString("lang","z")}")
             }
         }
-        editor.apply()
     }
     private fun getSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences("weather_prefs", Context.MODE_PRIVATE)
@@ -255,9 +264,9 @@ class SettingsFragment : Fragment() {
 
         // Set layout direction on the root view
         requireActivity().window.decorView.layoutDirection = layoutDirection
-        _binding.tvLanguage.text = resources.getString(R.string.language)
-        _binding.tvLocation.text = resources.getString(R.string.location)
-        _binding.tvTemperature.text = resources.getString(R.string.temperature)
+
+        Log.i(TAG, "setLocal: hi")
+        this.requireActivity().recreate()
     }
     private fun checkPermissions(): Boolean {
         Log.i(TAG, "checkPermissions: ")

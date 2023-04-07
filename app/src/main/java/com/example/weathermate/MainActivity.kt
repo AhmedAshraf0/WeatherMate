@@ -14,7 +14,13 @@ import androidx.databinding.DataBindingUtil
 import com.example.weathermate.databinding.ActivityMainBinding
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
+import android.os.Build
+import android.text.TextUtils
 import android.util.Log
+import android.view.View
+import androidx.core.view.ViewCompat
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,22 +39,25 @@ class MainActivity : AppCompatActivity() {
         //if 1 -> yes user entered once before there is shared saved
         //if-1 -> no it's not first time
 
-        if(sharedPreferences.getInt("first_time",0) == 0){
+        if (sharedPreferences.getInt("first_time", 0) == 0) {
             Log.i("Home", "onCreate: 1")
             editor.putInt("first_time", 1)
-            editor.putBoolean("is_gps",true)
-            editor.putString("units","metric")//m/s | celsius
-            editor.putString("lang","en")
+            editor.putBoolean("is_gps", true)
+            editor.putString("units", "metric")//m/s | celsius
+            editor.putString("lang", "en")
             editor.apply()
-        }else if(sharedPreferences.getInt("first_time",0) == 1 &&
-                sharedPreferences.getBoolean("succeed_once",false)){
+        } else if (sharedPreferences.getInt("first_time", 0) == 1 &&
+            sharedPreferences.getBoolean("succeed_once", false)
+        ) {
             Log.i("Home", "onCreate: -1")
             editor.putInt("first_time", -1)
             editor.apply()
         }
 
-        binding = DataBindingUtil.setContentView(this,
-        R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(
+            this,
+            R.layout.activity_main
+        )
 
         setSupportActionBar(binding.appBarMain.toolbar)
 

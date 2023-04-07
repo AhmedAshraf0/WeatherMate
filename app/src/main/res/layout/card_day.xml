@@ -83,8 +83,10 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="40dp"
+                android:layout_marginEnd="16dp"
                 android:contentDescription="@string/daystatus"
                 app:layout_constraintBottom_toTopOf="@id/h_main_card_e_gl"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintStart_toEndOf="@id/barrier2"
                 app:layout_constraintTop_toBottomOf="@id/h_main_card_s_gl"
                 app:srcCompat="@mipmap/sun" />
@@ -100,7 +102,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/day_status"
-                app:layout_constraintStart_toEndOf="@+id/day_status"
+                app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/day_status"
                 app:layout_constraintEnd_toStartOf="@+id/maxTempDeg"/>
 
@@ -157,6 +159,13 @@
                 app:barrierDirection="end"
                 app:constraint_referenced_ids="maxTempDeg,maxTemp"
                 tools:layout_editor_absoluteX="166dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="218dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

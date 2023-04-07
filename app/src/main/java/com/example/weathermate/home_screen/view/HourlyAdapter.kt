@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weathermate.R
 import com.example.weathermate.databinding.CardHourlyBinding
 import com.example.weathermate.home_screen.model.photos
+import com.example.weathermate.utilities.Converter
 import com.example.weathermate.weather_data_fetcher.HourlyForecast
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,7 +32,7 @@ class HourlyAdapter() : ListAdapter<HourlyForecast, HourlyAdapter.ViewHolder>(Di
 
         holder.cardHourlyBinding.currentImg.setImageResource(photos.get(currentHour.weather.get(0).icon)!!)
         holder.cardHourlyBinding.currentHour.text = convertToTime(currentHour.time)
-        holder.cardHourlyBinding.currentDayDeg.text = currentHour.temp.toInt().toString()
+        holder.cardHourlyBinding.currentDayDeg.text = Converter.convertDoubleToIntString(currentHour.temp)
     }
 
     private fun convertToTime(timestamp: Long): String {

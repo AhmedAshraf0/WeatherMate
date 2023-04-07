@@ -37,7 +37,7 @@
                 android:id="@+id/progress_bar"
                 android:layout_width="150dp"
                 android:layout_height="200dp"
-                android:layout_marginTop="232dp"
+                android:layout_marginTop="260dp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="@id/v_gl_end"
                 app:layout_constraintStart_toStartOf="@id/v_gl_start"
@@ -156,7 +156,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/rubik"
-                        android:text="@string/degree_type"
+                        android:text="@string/degree_symbol"
                         android:textColor="@color/degree_type"
                         android:textSize="32sp"
                         android:textStyle="bold"
@@ -434,7 +434,6 @@
                 app:cardBackgroundColor="@color/card_color"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
                 app:layout_constraintStart_toEndOf="@+id/card_hum"
                 app:layout_constraintTop_toBottomOf="@id/divider6">
@@ -474,7 +473,6 @@
                         android:text="@={Converter.INSTANCE.convertDoubleToString(weatherApiResponse.currentForecast.windSpeed)}"
                         android:textColor="@color/white"
                         android:textSize="@dimen/font_small"
-                        app:layout_constraintEnd_toEndOf="@+id/title_wind"
                         app:layout_constraintEnd_toStartOf="@+id/wind_val_per"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintHorizontal_chainStyle="packed"
@@ -559,7 +557,6 @@
                         android:text="@={Converter.INSTANCE.convertIntToString(weatherApiResponse.currentForecast.pressure)}"
                         android:textColor="@color/white"
                         android:textSize="@dimen/font_small"
-                        app:layout_constraintEnd_toEndOf="@+id/title_pres"
                         app:layout_constraintEnd_toStartOf="@+id/pers_val_symbol"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintHorizontal_chainStyle="packed"
@@ -576,7 +573,6 @@
                 app:cardBackgroundColor="@color/card_color"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
                 app:layout_constraintStart_toEndOf="@+id/card_pres"
                 app:layout_constraintTop_toBottomOf="@id/card_wind">
@@ -698,7 +694,6 @@
                 app:cardBackgroundColor="@color/card_color"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
                 app:layout_constraintStart_toEndOf="@+id/card_sunrise"
                 app:layout_constraintTop_toBottomOf="@id/card_cloud">
@@ -747,7 +742,7 @@
                 android:id="@+id/mainGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:constraint_referenced_ids="v_gl_start,v_gl_end,materialCardView,tv_feels,tv_feels_deg,tv_feels_symb,divider4,tv_title_hourly,rec_hourly,divider5,tv_title_days,rec_next_days,divider6,card_hum,card_wind,card_pres,card_cloud,card_sunrise,card_sunset" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
