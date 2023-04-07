@@ -3,6 +3,8 @@ package com.example.weathermate.map
 import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +12,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
+import android.widget.SearchView.OnQueryTextListener
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.weathermate.R
@@ -21,14 +25,19 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import java.io.IOException
 
-class MapFragment : Fragment(){
+class MapFragment : Fragment() , OnMapReadyCallback{
     private val TAG = "MapFragment"
     private lateinit var supportMapFragment: SupportMapFragment
     private lateinit var client: FusedLocationProviderClient
     private lateinit var sharedPreferences : SharedPreferences
     private  lateinit var editor :SharedPreferences.Editor
+    private lateinit var searchTextField: SearchView
+    private lateinit var map : GoogleMap
+    private lateinit var marker : Marker
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,9 +52,40 @@ class MapFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
 
         // Inflate the layout for this fragment
+        searchTextField = view.findViewById(R.id.tf)
+        searchTextField.setOnQueryTextListener(object: OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                val searchResult = searchTextField.query.toString()
+                var addressList : List<Address>? = null
+
+                if(!searchResult.isNullOrEmpty()){
+                    val geocoder = Geocoder(requireActivity())
+                    try{
+                        addressList = geocoder.getFromLocationName(searchResult, 1)
+                    }catch (e:IOException){
+                        Log.i(TAG, "onQueryTextSubmit: ${e.printStackTrace()}")
+                    }
+                    val latLng = LatLng(addressList!!.get(0).latitude,addressList.get(0).longitude)
+                    marker.remove()
+                    map.addMarker(MarkerOptions().position(latLng))!!.title = searchResult
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10f))
+                }
+
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+
+        })
+
         client = LocationServices.getFusedLocationProviderClient(requireActivity())
         supportMapFragment = childFragmentManager.findFragmentById(R.id.google_maps) as SupportMapFragment
         getCurrentLocation()
+
+
+        supportMapFragment.getMapAsync(this)
     }
 
     @Suppress("MissingPermission")
@@ -65,20 +105,19 @@ class MapFragment : Fragment(){
                     it.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng,10f))
 
                     //add marker on map
-                    var marker = it.addMarker(markerOptions)
+                    marker = it.addMarker(markerOptions)!!
 
                     it.setOnMapClickListener{latLng->
-                        marker!!.remove()
+                        marker.remove()
                         marker = it.addMarker(
                             MarkerOptions()
                                 .position(latLng)
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                                 .draggable(false)
                                 .title("Confirm location")
-                                .snippet("Confirm location")
 
-                        //title to be added
-                        )
+                            //title to be added
+                        )!!
                     }
 
                     it.setOnMarkerClickListener {
@@ -115,5 +154,9 @@ class MapFragment : Fragment(){
 
     private fun getSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences("weather_prefs", Context.MODE_PRIVATE)
+    }
+
+    override fun onMapReady(p0: GoogleMap) {
+        map = p0
     }
 }
