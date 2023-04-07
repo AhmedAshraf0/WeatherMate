@@ -24,11 +24,10 @@
         <action
             android:id="@+id/action_nav_settings_to_mapFragment"
             app:destination="@id/mapFragment" />
-        <action
-            android:id="@+id/action_nav_settings_self"
-            app:destination="@id/nav_settings"
-            app:popUpTo="@id/nav_settings"
-            app:popUpToInclusive="true" />
+        <argument
+            android:name="locationLatLng"
+            app:argType="string"
+            android:defaultValue="hi"/>
     </fragment>
     <fragment
         android:id="@+id/nav_alerts"
@@ -40,5 +39,11 @@
         android:name="com.example.weathermate.map.MapFragment"
         android:label="@string/map_fragment"
         tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_mapFragment_to_nav_settings"
+            app:destination="@id/nav_settings" />
+        <argument
+            android:name="is_from_settings"
+            app:argType="boolean" />
     </fragment>
 </navigation>

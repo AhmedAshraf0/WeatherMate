@@ -32,6 +32,8 @@ import java.util.*
 import android.content.res.*
 import android.os.Build
 import android.text.TextUtils
+import androidx.navigation.fragment.navArgs
+import com.example.weathermate.map.MapFragmentDirections
 
 
 class SettingsFragment : Fragment() {
@@ -40,6 +42,7 @@ class SettingsFragment : Fragment() {
     private lateinit var _binding : FragmentSettingsBinding
     private lateinit var sharedPreferences : SharedPreferences
     private  lateinit var editor :SharedPreferences.Editor
+    val args : SettingsFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +60,10 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.i(TAG, "onViewCreated: ")
+
+
+        val testing = args.locationLatLng
+        Log.i(TAG, "onViewCreated: ${testing}  -yay")
 
         //to be optimized
         if(sharedPreferences.getBoolean("is_gps",true)){
@@ -115,7 +122,8 @@ class SettingsFragment : Fragment() {
 
                 val navController = Navigation.findNavController(requireActivity(),
                     R.id.nav_host_fragment_content_main)
-                navController.navigate(R.id.action_nav_settings_to_mapFragment)
+                val action = SettingsFragmentDirections.actionNavSettingsToMapFragment(true)
+                navController.navigate(action)
             }
             _binding.rbGps.id -> {
                 Log.i(TAG, "onRbClicked: rbGps")

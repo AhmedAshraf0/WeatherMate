@@ -16,7 +16,10 @@ import android.widget.SearchView
 import android.widget.SearchView.OnQueryTextListener
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.weathermate.R
+import com.example.weathermate.settings.SettingsFragmentArgs
+import com.example.weathermate.settings.SettingsFragmentDirections
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -38,6 +41,7 @@ class MapFragment : Fragment() , OnMapReadyCallback{
     private lateinit var searchTextField: SearchView
     private lateinit var map : GoogleMap
     private lateinit var marker : Marker
+    val args : MapFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -134,11 +138,17 @@ class MapFragment : Fragment() , OnMapReadyCallback{
                                 editor.putString("location","${location.longitude},${location.latitude}")
                                 editor.apply()
 
-                                /*val navController = Navigation.findNavController(requireActivity(),
-                                    R.id.nav_host_fragment_content_main)
-                                navController.navigate(R.id.action_mapFragment_to_nav_settings)*/
 
-                                findNavController().popBackStack()
+                                //--until adding a button to take this actions
+                                if(args.isFromSettings){
+                                    val navController = Navigation.findNavController(requireActivity(),
+                                        R.id.nav_host_fragment_content_main)
+                                    val action = MapFragmentDirections.actionMapFragmentToNavSettings(
+                                        "${location.longitude},${location.latitude}")
+                                    navController.navigate(action)
+                                }else{
+                                    //to nav to favs screen
+                                }
                             }
                             .setNegativeButton("No", null)
                             .show()
