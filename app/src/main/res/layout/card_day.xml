@@ -25,14 +25,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.17" />
+                app:layout_constraintGuide_percent="0.14" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/v_main_e_gl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.80" />
+                app:layout_constraintGuide_percent="0.84" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/h_main_card_s_gl"
@@ -95,16 +95,16 @@
                 android:id="@+id/maxTemp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
+                android:layout_marginStart="24dp"
                 android:fontFamily="@font/rubik"
                 android:text="@string/current_degree"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/day_status"
+                app:layout_constraintEnd_toStartOf="@+id/maxTempDeg"
                 app:layout_constraintStart_toEndOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="@+id/day_status"
-                app:layout_constraintEnd_toStartOf="@+id/maxTempDeg"/>
+                app:layout_constraintTop_toTopOf="@+id/day_status" />
 
             <TextView
                 android:id="@+id/maxTempDeg"
