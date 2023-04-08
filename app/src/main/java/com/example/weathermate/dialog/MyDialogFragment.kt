@@ -8,12 +8,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.weathermate.R
 import com.example.weathermate.databinding.FragmentDialogBinding
 
 class MyDialogFragment : DialogFragment() {
-    lateinit var _binding : FragmentDialogBinding
+    lateinit var _binding: FragmentDialogBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,12 +32,21 @@ class MyDialogFragment : DialogFragment() {
 
         _binding.okButton.setOnClickListener {
             Log.i("TAG", "onViewCreated: ok")
-            getTargetFragment()?.onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, Intent())
+            getTargetFragment()?.onActivityResult(
+                getTargetRequestCode(),
+                Activity.RESULT_OK,
+                Intent()
+            )
             dismiss()
         }
 
         _binding.cancelButton.setOnClickListener {
             Log.i("TAG", "onViewCreated: cancel")
+            Toast.makeText(
+                requireContext(),
+                "Location services required for this feature.",
+                Toast.LENGTH_LONG
+            ).show()
             activity?.finishAffinity()
         }
     }

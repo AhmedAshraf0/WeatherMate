@@ -62,7 +62,7 @@ class FavoritesFragment : Fragment() {
             )
 
         favoriteViewModel = ViewModelProvider(this,factory).get(FavoriteViewModel::class.java)
-        favoritesAdapter = FavoritesAdapter(favoriteViewModel,requireContext())
+        favoritesAdapter = FavoritesAdapter(favoriteViewModel,requireActivity())
 
         _binding.rvFavs.adapter = favoritesAdapter
 
