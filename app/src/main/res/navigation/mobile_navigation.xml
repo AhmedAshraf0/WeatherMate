@@ -15,7 +15,15 @@
         android:id="@+id/nav_favs"
         android:name="com.example.weathermate.favorites.view.FavoritesFragment"
         android:label="@string/fragment_favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_nav_favs_to_mapFragment"
+            app:destination="@id/mapFragment" />
+        <argument
+            android:name="locationLatLong"
+            app:argType="string"
+            android:defaultValue="hi" />
+    </fragment>
     <fragment
         android:id="@+id/nav_settings"
         android:name="com.example.weathermate.settings.view.SettingsFragment"
@@ -45,5 +53,8 @@
         <argument
             android:name="is_from_settings"
             app:argType="boolean" />
+        <action
+            android:id="@+id/action_mapFragment_to_nav_favs"
+            app:destination="@id/nav_favs" />
     </fragment>
 </navigation>

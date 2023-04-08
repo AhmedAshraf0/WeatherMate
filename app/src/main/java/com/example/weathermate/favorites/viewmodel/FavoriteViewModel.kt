@@ -10,6 +10,7 @@ import com.example.weathermate.weather_data_fetcher.FavoriteWeatherResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class FavoriteViewModel(
@@ -40,9 +41,10 @@ class FavoriteViewModel(
             ).catch {
                 _retrofitStateFlow.value = ApiState.Failure(it)
                 Log.i(TAG, "getWeatherDetails: ${it.message}")
-            }.collect {
+            }.collectLatest {
                 if (it.isSuccessful) {
                     _retrofitStateFlow.value = ApiState.Success(it.body()!!)
+                    Log.i(TAG, "getWeatherDetails: ${it.body()!!.timezone_offset}")
                 } else {
                     Log.i(TAG, "getWeatherDetails: failed ${it.errorBody().toString()}")
                 }
@@ -51,12 +53,14 @@ class FavoriteViewModel(
     }
 
     fun getLocalFavDetails() {
+        Log.i(TAG, "getLocalFavDetails: ")
         viewModelScope.launch(Dispatchers.IO) {
             _repo.getLocalFavDetails().catch{
                 _roomStateFlow.value = DbState.Failure(it)
                 Log.i(TAG, "getWeatherDetails-room: ${it.printStackTrace()}")
-            }.collect{
+            }.collectLatest{
                 _roomStateFlow.value = DbState.Success(favoriteWeatherResponse = it)
+                Log.i(TAG, "getLocalFavDetails: success ${it.size}")
             }
         }
     }

@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="myFragment"
+            type="com.example.weathermate.favorites.view.FavoritesFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,6 +14,18 @@
         android:layout_height="match_parent"
         android:background="@color/main_color">
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/progress_bar"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="260dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="lottie_progress_bar.json"
+            app:lottie_speed="2" />
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButton"
             android:layout_width="wrap_content"
@@ -22,6 +36,7 @@
             android:clickable="true"
             android:contentDescription="@string/fab"
             android:focusable="true"
+            android:onClick="@{myFragment::onFabClicked}"
             android:src="@android:drawable/ic_input_add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -41,11 +56,20 @@
             android:layout_height="250dp"
             android:contentDescription="@string/no_results"
             android:cropToPadding="false"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@mipmap/no_results" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/mainGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="floatingActionButton,rv_favs,imageView" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

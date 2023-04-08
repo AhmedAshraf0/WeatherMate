@@ -15,11 +15,8 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.SearchView.OnQueryTextListener
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.weathermate.R
-import com.example.weathermate.settings.SettingsFragmentArgs
-import com.example.weathermate.settings.SettingsFragmentDirections
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -147,7 +144,11 @@ class MapFragment : Fragment() , OnMapReadyCallback{
                                         "${location.longitude},${location.latitude}")
                                     navController.navigate(action)
                                 }else{
-                                    //to nav to favs screen
+                                    val navController = Navigation.findNavController(requireActivity(),
+                                        R.id.nav_host_fragment_content_main)
+                                    val action = MapFragmentDirections.actionMapFragmentToNavFavs(
+                                        "${location.longitude},${location.latitude}")
+                                    navController.navigate(action)
                                 }
                             }
                             .setNegativeButton("No", null)

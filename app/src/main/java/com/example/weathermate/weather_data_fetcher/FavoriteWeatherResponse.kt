@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity("favorites",primaryKeys = ["id"])
+@Entity("favorites")
 data class FavoriteWeatherResponse(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo
@@ -20,5 +20,7 @@ data class FavoriteWeatherResponse(
     @ColumnInfo
     var dt: Long = 0L,
     @ColumnInfo
-    var img: String = ""
+    var img: String = "",
+    @ColumnInfo
+    var description: String = ""
 )

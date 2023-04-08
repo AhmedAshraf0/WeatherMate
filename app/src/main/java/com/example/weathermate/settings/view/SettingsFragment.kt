@@ -21,7 +21,6 @@ import android.content.res.*
 import android.os.Build
 import android.text.TextUtils
 import androidx.navigation.fragment.navArgs
-import com.example.weathermate.settings.SettingsFragmentDirections
 
 
 class SettingsFragment : Fragment() {
