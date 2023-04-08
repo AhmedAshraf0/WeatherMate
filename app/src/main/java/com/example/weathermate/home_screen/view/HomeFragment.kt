@@ -110,7 +110,6 @@ class HomeFragment : Fragment() {
         units: String? = null,
         lang: String? = null
     ) {
-        var weatherResponse: WeatherResponse? = null
 
         if (onlineData) {
             homeViewModel.getWeatherDetails(latitude!!, longitude!!, units!!, lang!!)
@@ -129,7 +128,6 @@ class HomeFragment : Fragment() {
                             )
 
                             _binding.weatherApiResponse = it.data
-                            weatherResponse = it.data
 
                             val geocoder = Geocoder(requireContext(), Locale.getDefault())
                             val address = geocoder.getFromLocation(
@@ -191,9 +189,6 @@ class HomeFragment : Fragment() {
                             //Can be modified using data binding
                             Log.i(TAG, "Room: ${it.data!!.locationName}")
                             _binding.tvCurrentLocation.text = it.data.locationName
-
-                            //can't remember way!
-                            weatherResponse = it.data
 
                             onResponseState(it.data)
                         }

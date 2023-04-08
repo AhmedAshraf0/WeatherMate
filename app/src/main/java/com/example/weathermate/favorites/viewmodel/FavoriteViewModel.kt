@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FavoriteViewModel(
     private val _repo: FavoriteRepositoryInterface
@@ -68,12 +69,19 @@ class FavoriteViewModel(
     fun insertNewFavorite(favoriteWeatherResponse: FavoriteWeatherResponse){
         viewModelScope.launch(Dispatchers.IO) {
             _repo.insertNewFavorite(favoriteWeatherResponse)
+            withContext(Dispatchers.IO){
+                getLocalFavDetails()
+            }
         }
+        Log.i(TAG, "insertNewFavorite: hi ${favoriteWeatherResponse.dt}")
     }
 
     fun deleteFavorite(favoriteWeatherResponse: FavoriteWeatherResponse){
         viewModelScope.launch(Dispatchers.IO) {
             _repo.deleteFavorite(favoriteWeatherResponse)
+            withContext(Dispatchers.IO){
+                getLocalFavDetails()
+            }
         }
     }
 

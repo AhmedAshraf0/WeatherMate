@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.weathermate.R
 import com.example.weathermate.database.ConcreteLocalSource
@@ -24,19 +25,14 @@ import com.example.weathermate.databinding.FragmentFavoritesBinding
 import com.example.weathermate.favorites.model.FavoriteRepository
 import com.example.weathermate.favorites.viewmodel.FavoriteViewModel
 import com.example.weathermate.favorites.viewmodel.FavoriteViewModelFactory
-import com.example.weathermate.home_screen.model.photos
+import com.example.weathermate.map.MapFragment
 import com.example.weathermate.network.ApiState
 import com.example.weathermate.network.ConcreteRemoteSource
-import com.example.weathermate.settings.view.SettingsFragmentArgs
 import com.example.weathermate.weather_data_fetcher.FavoriteWeatherResponse
-import com.example.weathermate.weather_data_fetcher.WeatherResponse
-import kotlinx.coroutines.flow.collectLatest
 import java.util.*
 
 class FavoritesFragment : Fragment() {
     private val TAG = "FavoritesFragment"
-    private val PERMISSION_ID = 10
-    private val REQUEST_CODE_MY_DIALOG = 10
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
 
@@ -45,19 +41,17 @@ class FavoritesFragment : Fragment() {
     private lateinit var favoriteViewModel: FavoriteViewModel
     private lateinit var factory: FavoriteViewModelFactory
     private lateinit var favoritesAdapter: FavoritesAdapter
-    private val args : FavoritesFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val args : FavoritesFragmentArgs by navArgs()
         _binding = FragmentFavoritesBinding.inflate(inflater)
         _binding.myFragment = this
 
         sharedPreferences = getSharedPreferences(requireActivity())
         editor = sharedPreferences.edit()
-
-        favoritesAdapter = FavoritesAdapter()
 
         factory =
             FavoriteViewModelFactory(
@@ -68,11 +62,18 @@ class FavoritesFragment : Fragment() {
             )
 
         favoriteViewModel = ViewModelProvider(this,factory).get(FavoriteViewModel::class.java)
+        favoritesAdapter = FavoritesAdapter(favoriteViewModel,requireContext())
 
-        Log.i(TAG, "onCreateView: line:72- ${args.locationLatLong.length}")
-        if(args.locationLatLong != "hi"){
+        _binding.rvFavs.adapter = favoritesAdapter
+
+        Log.i(TAG, "onCreateView:  ${args.locationLatLong.length}")
+        Log.i(
+            TAG,
+            "stack: ${findNavController().previousBackStackEntry?.destination?.id}\n${R.id.mapFragment}"
+        )
+        if(args.locationLatLong != "hi" && MapFragment.isFromMap){
             if(checkForInternet(requireContext())){
-                Log.i(TAG, "onCreateView: retrofit")
+                MapFragment.isFromMap =false
                 getWeatherDetails(
                     args.locationLatLong.split(",").get(0).toDouble(),
                     args.locationLatLong.split(",").get(1).toDouble(),
@@ -82,8 +83,6 @@ class FavoritesFragment : Fragment() {
                     )
             }
         }
-        TODO("maybe because of here")
-        //get data from room and pass it to
         favoriteViewModel.getLocalFavDetails()
 
         getLocalWeatherDetails()
@@ -142,9 +141,10 @@ class FavoritesFragment : Fragment() {
         )
 
         lifecycleScope.launchWhenResumed {
-            favoriteViewModel.retrofitStateFlow.collectLatest {
+            favoriteViewModel.retrofitStateFlow.collect {
                 when(it){
                     is ApiState.Success ->{
+                        Log.i(TAG, "getWeatherDetails:apisuccess ${it.data.currentForecast!!.temp}")
                         val geocoder = Geocoder(requireContext(), Locale.getDefault())
                         val address = geocoder.getFromLocation(
                             it.data.cityLatitude,
@@ -169,7 +169,6 @@ class FavoritesFragment : Fragment() {
                             temp = it.data.currentForecast!!.temp,
                             img = it.data.currentForecast!!.weather.get(0).icon
                         )
-                        Log.i(TAG, "getWeatherDetails: success then insert to room")
                         favoriteViewModel.insertNewFavorite(favoriteWeatherResponse)
                     }
                     is ApiState.Loading ->{
@@ -190,25 +189,26 @@ class FavoritesFragment : Fragment() {
     private fun getLocalWeatherDetails(){
         Log.i(TAG, "getLocalWeatherDetails: ")
         lifecycleScope.launchWhenResumed {
-            favoriteViewModel.roomStateFlow.collectLatest {
+            favoriteViewModel.roomStateFlow.collect {
                 when(it){
                     is DbState.Success ->{
-                        Log.i(TAG, "onCreateView: ${it.favoriteWeatherResponse!!. size}")
+                        Log.i(TAG, "getLocalWeatherDetails: ${it.favoriteWeatherResponse!!.size}")
                         if(it.favoriteWeatherResponse.isNotEmpty()){
                             favoritesAdapter.submitList(it.favoriteWeatherResponse)
-                            _binding.rvFavs.adapter = favoritesAdapter
 
                             _binding.progressBar.visibility = View.GONE
                             _binding.progressBar.pauseAnimation()
                             Log.i(TAG, "getLocalWeatherDetails: success in if")
                         }else{//we have no favs
-                            _binding.imageView.visibility = View.VISIBLE
                             Log.i(TAG, "getLocalWeatherDetails: success in else")
+                            _binding.progressBar.visibility = View.GONE
+                            _binding.progressBar.pauseAnimation()
+                            favoritesAdapter.submitList(listOf())
                         }
                         _binding.mainGroup.visibility = View.VISIBLE
                     }
                     is DbState.Loading ->{
-                        Log.i(TAG, "getWeatherDetails db: loading")
+                        Log.i(TAG, "getLocalWeatherDetails db: loading")
                         _binding.progressBar.playAnimation()
                         _binding.progressBar.visibility = View.VISIBLE
                         _binding.mainGroup.visibility = View.GONE
@@ -217,7 +217,7 @@ class FavoritesFragment : Fragment() {
                         _binding.progressBar.pauseAnimation()
                         Log.i(
                             TAG,
-                            "onCreateView: Failed to get data from room ${it.msg.printStackTrace()}"
+                            "getLocalWeatherDetails: Failed to get data from room ${it.msg.printStackTrace()}"
                         )
                     }
                 }

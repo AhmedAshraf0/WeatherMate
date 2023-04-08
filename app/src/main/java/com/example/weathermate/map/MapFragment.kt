@@ -40,6 +40,10 @@ class MapFragment : Fragment() , OnMapReadyCallback{
     private lateinit var marker : Marker
     val args : MapFragmentArgs by navArgs()
 
+    companion object{
+        var isFromMap = false
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -144,6 +148,7 @@ class MapFragment : Fragment() , OnMapReadyCallback{
                                         "${location.longitude},${location.latitude}")
                                     navController.navigate(action)
                                 }else{
+                                    isFromMap = true
                                     val navController = Navigation.findNavController(requireActivity(),
                                         R.id.nav_host_fragment_content_main)
                                     val action = MapFragmentDirections.actionMapFragmentToNavFavs(
