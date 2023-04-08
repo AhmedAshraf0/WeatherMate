@@ -78,10 +78,6 @@ class FavoriteWeatherFragment : Fragment() {
                 sharedPreferences.getString("units","metric")!!,
                 sharedPreferences.getString("lang","en")!!
             )
-        } else {
-            Log.i(TAG, "checkForInternet: no")
-
-            //--Show snakebar or don't get to here if no internet available
         }
         return _binding.root
     }

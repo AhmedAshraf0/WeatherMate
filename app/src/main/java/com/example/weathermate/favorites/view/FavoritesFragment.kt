@@ -46,7 +46,6 @@ class FavoritesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val args : FavoritesFragmentArgs by navArgs()
         _binding = FragmentFavoritesBinding.inflate(inflater)
         _binding.myFragment = this
 
@@ -62,7 +61,14 @@ class FavoritesFragment : Fragment() {
             )
 
         favoriteViewModel = ViewModelProvider(this,factory).get(FavoriteViewModel::class.java)
-        favoritesAdapter = FavoritesAdapter(favoriteViewModel,requireActivity())
+
+        return _binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val args : FavoritesFragmentArgs by navArgs()
+        favoritesAdapter = FavoritesAdapter(favoriteViewModel,requireActivity(),view)
 
         _binding.rvFavs.adapter = favoritesAdapter
 
@@ -80,13 +86,12 @@ class FavoritesFragment : Fragment() {
                     sharedPreferences.getString("units","metric")!!,
                     sharedPreferences.getString("lang","en")!!,
                     "minutely,hourly,daily,alerts"
-                    )
+                )
             }
         }
         favoriteViewModel.getLocalFavDetails()
 
         getLocalWeatherDetails()
-        return _binding.root
     }
 
     private fun getSharedPreferences(context: Context): SharedPreferences {

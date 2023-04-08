@@ -2,7 +2,11 @@ package com.example.weathermate.favorites.view
 
 import android.app.Activity
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
@@ -17,12 +21,14 @@ import com.example.weathermate.favorites.viewmodel.FavoriteViewModel
 import com.example.weathermate.home_screen.model.photos
 import com.example.weathermate.utilities.Converter
 import com.example.weathermate.weather_data_fetcher.FavoriteWeatherResponse
+import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.*
 
 class FavoritesAdapter(
     private val favoriteViewModel: FavoriteViewModel,
     private val activity: Activity,
+    private val view: View
 ) : ListAdapter<FavoriteWeatherResponse, FavoritesAdapter.ViewHolder>(DiffUtilFavorites()) {
 
     inner class ViewHolder(var cardFavoriteBinding: CardFavoriteBinding) :
@@ -60,12 +66,16 @@ class FavoritesAdapter(
         }
 
         holder.cardFavoriteBinding.favCard.setOnClickListener{
-            val navController = Navigation.findNavController(activity,
-                R.id.nav_host_fragment_content_main)
-            val action = FavoritesFragmentDirections.actionNavFavsToFavoriteWeatherFragment(
-                "${favoriteWeatherResponse.latitude},${favoriteWeatherResponse.longitude}"
-            )
-            navController.navigate(action)
+            if(checkForInternet(activity)){
+                val navController = Navigation.findNavController(activity,
+                    R.id.nav_host_fragment_content_main)
+                val action = FavoritesFragmentDirections.actionNavFavsToFavoriteWeatherFragment(
+                    "${favoriteWeatherResponse.latitude},${favoriteWeatherResponse.longitude}"
+                )
+                navController.navigate(action)
+            }else{
+                Snackbar.make(view, "No internet connection", Snackbar.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -80,4 +90,30 @@ class FavoritesAdapter(
         sdf.timeZone = TimeZone.getDefault()
         return sdf.format(date)
     }
+
+    private fun checkForInternet(context: Context): Boolean {
+        //connectivityManager to get system services so i can know network connections
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            val network = connectivityManager.activeNetwork ?: return false
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return when {
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+                else -> false
+            }
+        } else {
+            @Suppress("DEPRECATION") val networkInfo =
+                connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
+    }
+
 }
