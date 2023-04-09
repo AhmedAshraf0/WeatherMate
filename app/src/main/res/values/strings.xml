@@ -72,4 +72,5 @@
     <string name="fab" translatable="false">Add new Favorite</string>
     <string name="no_results" translatable="false">no_results_photo</string>
     <string name="alexandria" translatable="false">Alexandria</string>
+    <string name="to_add_a_location">to add a location</string>
 </resources>

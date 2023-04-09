@@ -21,4 +21,18 @@
         android:elevation="5dp"
         android:background="@drawable/trf_style"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/baseline_add_24"
+        android:contentDescription="@string/to_add_a_location"
+        android:backgroundTint="@color/degree_type"
+        android:onClick="onFabClicked"
+        android:clickable="true"
+        android:focusable="true"/>
+
 </RelativeLayout>

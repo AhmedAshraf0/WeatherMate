@@ -29,6 +29,10 @@ import com.example.weathermate.map.MapFragment
 import com.example.weathermate.network.ApiState
 import com.example.weathermate.network.ConcreteRemoteSource
 import com.example.weathermate.weather_data_fetcher.FavoriteWeatherResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.IOException
 import java.util.*
 
 class FavoritesFragment : Fragment() {
@@ -150,20 +154,29 @@ class FavoritesFragment : Fragment() {
                 when(it){
                     is ApiState.Success ->{
                         Log.i(TAG, "getWeatherDetails:apisuccess ${it.data.currentForecast!!.temp}")
-                        val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                        val address = geocoder.getFromLocation(
-                            it.data.cityLatitude,
-                            it.data.cityLongitude,
-                            1
-                        ) as List<Address>
 
                         //get the complete address
                         try {
+                            val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                            val address = geocoder.getFromLocation(
+                                it.data.cityLatitude,
+                                it.data.cityLongitude,
+                                1
+                            ) as List<Address>
                             //swap location from api to location from geocoder
-                            it.data.locationName = address.get(0).getAddressLine(0)
-                        }catch (e: IndexOutOfBoundsException){
+                            try{
+                                if(address.get(0).getAddressLine(0).split(",").size > 1){
+                                    it.data.locationName = address.get(0).getAddressLine(0).split(",").get(1)
+                                }else{
+                                    it.data.locationName = address.get(0).getAddressLine(0).split(",").get(0)
+                                }
+                            }catch (e: IndexOutOfBoundsException){
+                                Log.i(TAG, "getWeatherDetails: ${address}")
+                                it.data.locationName = "-"
+                            }
+                        }catch (e: IOException){
                             it.data.locationName = "-"
-                            Log.i(TAG, "getWeatherDetails: ----${address.size}")
+                            Log.i(TAG, "getWeatherDetails: failed")
                         }
                         val favoriteWeatherResponse = FavoriteWeatherResponse(
                             latitude = latitude,

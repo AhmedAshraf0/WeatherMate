@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.IOException
 
 class MapFragment : Fragment() , OnMapReadyCallback{
@@ -36,6 +37,7 @@ class MapFragment : Fragment() , OnMapReadyCallback{
     private lateinit var sharedPreferences : SharedPreferences
     private  lateinit var editor :SharedPreferences.Editor
     private lateinit var searchTextField: SearchView
+    private lateinit var fab : FloatingActionButton
     private lateinit var map : GoogleMap
     private lateinit var marker : Marker
     val args : MapFragmentArgs by navArgs()
@@ -58,6 +60,7 @@ class MapFragment : Fragment() , OnMapReadyCallback{
 
         // Inflate the layout for this fragment
         searchTextField = view.findViewById(R.id.tf)
+        fab = view.findViewById(R.id.fab)
         searchTextField.setOnQueryTextListener(object: OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 val searchResult = searchTextField.query.toString()
@@ -89,6 +92,40 @@ class MapFragment : Fragment() , OnMapReadyCallback{
         supportMapFragment = childFragmentManager.findFragmentById(R.id.google_maps) as SupportMapFragment
         getCurrentLocation()
 
+        fab.setOnClickListener{
+            AlertDialog.Builder(requireContext())
+                .setTitle("Confirm location")
+                .setMessage("Are you sure you want to choose this location?")
+                .setPositiveButton("Yes") { dialog, which ->
+                    // Return to the previous fragment and pass the selected location
+                    val location = marker.position
+                    Log.i(
+                        TAG,
+                        "getCurrentLocation: ${location.longitude} ${location.latitude}"
+                    )
+                    editor.putString("location","${location.longitude},${location.latitude}")
+                    editor.apply()
+
+
+                    //--until adding a button to take this actions
+                    if(args.isFromSettings){
+                        val navController = Navigation.findNavController(requireActivity(),
+                            R.id.nav_host_fragment_content_main)
+                        val action = MapFragmentDirections.actionMapFragmentToNavSettings(
+                            "${location.longitude},${location.latitude}")
+                        navController.navigate(action)
+                    }else{
+                        isFromMap = true
+                        val navController = Navigation.findNavController(requireActivity(),
+                            R.id.nav_host_fragment_content_main)
+                        val action = MapFragmentDirections.actionMapFragmentToNavFavs(
+                            "${location.longitude},${location.latitude}")
+                        navController.navigate(action)
+                    }
+                }
+                .setNegativeButton("No", null)
+                .show()
+        }
 
         supportMapFragment.getMapAsync(this)
     }
@@ -123,43 +160,6 @@ class MapFragment : Fragment() , OnMapReadyCallback{
 
                             //title to be added
                         )!!
-                    }
-
-                    it.setOnMarkerClickListener {
-                        AlertDialog.Builder(requireContext())
-                            .setTitle("Confirm location")
-                            .setMessage("Are you sure you want to choose this location?")
-                            .setPositiveButton("Yes") { dialog, which ->
-                                // Return to the previous fragment and pass the selected location
-                                val location = marker.position
-                                Log.i(
-                                    TAG,
-                                    "getCurrentLocation: ${location.longitude} ${location.latitude}"
-                                )
-                                editor.putString("location","${location.longitude},${location.latitude}")
-                                editor.apply()
-
-
-                                //--until adding a button to take this actions
-                                if(args.isFromSettings){
-                                    val navController = Navigation.findNavController(requireActivity(),
-                                        R.id.nav_host_fragment_content_main)
-                                    val action = MapFragmentDirections.actionMapFragmentToNavSettings(
-                                        "${location.longitude},${location.latitude}")
-                                    navController.navigate(action)
-                                }else{
-                                    isFromMap = true
-                                    val navController = Navigation.findNavController(requireActivity(),
-                                        R.id.nav_host_fragment_content_main)
-                                    val action = MapFragmentDirections.actionMapFragmentToNavFavs(
-                                        "${location.longitude},${location.latitude}")
-                                    navController.navigate(action)
-                                }
-                            }
-                            .setNegativeButton("No", null)
-                            .show()
-
-                        false
                     }
                 }
             }
