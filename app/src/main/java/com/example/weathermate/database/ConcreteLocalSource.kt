@@ -1,6 +1,7 @@
 package com.example.weathermate.database
 
 import android.content.Context
+import com.example.weathermate.weather_data_fetcher.FavoriteWeatherResponse
 import com.example.weathermate.weather_data_fetcher.WeatherResponse
 import kotlinx.coroutines.flow.Flow
 
@@ -20,5 +21,17 @@ class ConcreteLocalSource(context: Context): LocalSource {
 
     override suspend fun updateWeatherDetails(weatherResponse: WeatherResponse): Int {
         return weatherDao.updateWeatherDetails(weatherResponse)
+    }
+
+    override fun getLocalFavDetails(): List<FavoriteWeatherResponse> {
+        return weatherDao.getLocalFavDetails()
+    }
+
+    override suspend fun insertNewFavorite(favoriteWeatherResponse: FavoriteWeatherResponse) {
+        weatherDao.insertNewFavorite(favoriteWeatherResponse)
+    }
+
+    override suspend fun deleteFavorite(favoriteWeatherResponse: FavoriteWeatherResponse) {
+        weatherDao.deleteFavorite(favoriteWeatherResponse)
     }
 }

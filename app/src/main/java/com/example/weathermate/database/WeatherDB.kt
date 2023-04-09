@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.weathermate.weather_data_fetcher.FavoriteWeatherResponse
 import com.example.weathermate.weather_data_fetcher.WeatherResponse
 
-@Database(entities = [WeatherResponse::class], version = 1)
+@Database(entities = [WeatherResponse::class,FavoriteWeatherResponse::class], version = 1)
 abstract class WeatherDB : RoomDatabase(){
 
     companion object{

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/fav_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        app:cardBackgroundColor="@color/card_color"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/v_s_gl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.10" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/v_e_gl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.90" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/h_s_gl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.10" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/h_e_gl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.90" />
+
+            <TextView
+                android:id="@+id/tv_city_name"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/rubik"
+                android:maxLines="2"
+                android:text="@string/alexandria"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/v_s_gl"
+                app:layout_constraintTop_toTopOf="@+id/h_s_gl" />
+
+            <ImageView
+                android:id="@+id/fav_img"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintEnd_toStartOf="@+id/tv_fav_deg"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@+id/tv_city_name"
+                app:layout_constraintTop_toTopOf="@+id/h_s_gl"
+                app:srcCompat="@mipmap/sun" />
+
+            <TextView
+                android:id="@+id/tv_fav_deg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:fontFamily="@font/rubik"
+                android:text="@string/max_deg"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/fav_img"
+                app:layout_constraintEnd_toStartOf="@+id/tv_fav_deg_symbol"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/fav_img"
+                app:layout_constraintTop_toTopOf="@+id/fav_img" />
+
+            <TextView
+                android:id="@+id/tv_fav_deg_symbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/rubik"
+                android:text="@string/degree_symbol"
+                android:textColor="@color/degree_type"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_fav_deg"
+                app:layout_constraintEnd_toStartOf="@+id/v_e_gl"
+                app:layout_constraintStart_toEndOf="@+id/tv_fav_deg"
+                app:layout_constraintTop_toTopOf="@+id/tv_fav_deg" />
+
+            <TextView
+                android:id="@+id/tv_weather_desc"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="34dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/rubik"
+                android:maxLines="1"
+                android:text="@string/weather_desc"
+                android:textAlignment="textEnd"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/h_e_gl"
+                app:layout_constraintEnd_toStartOf="@+id/v_e_gl"
+                app:layout_constraintTop_toBottomOf="@+id/tv_fav_deg" />
+
+            <TextView
+                android:id="@+id/tv_last_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/current_time"
+                android:fontFamily="@font/rubik"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/h_e_gl"
+                app:layout_constraintStart_toStartOf="@+id/v_s_gl" />
+
+            <ImageView
+                android:id="@+id/deleteIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/h_e_gl"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/v_e_gl"
+                app:layout_constraintTop_toTopOf="@+id/h_s_gl"
+                app:srcCompat="@drawable/baseline_delete_24" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

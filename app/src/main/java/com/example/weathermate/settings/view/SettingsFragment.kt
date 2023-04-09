@@ -1,37 +1,26 @@
-package com.example.weathermate.settings
+package com.example.weathermate.settings.view
 
 import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.location.Location
-import android.media.VolumeShaper.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import com.example.weathermate.R
 import com.example.weathermate.databinding.FragmentSettingsBinding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import java.util.*
 import android.content.res.*
 import android.os.Build
 import android.text.TextUtils
+import androidx.navigation.fragment.navArgs
 
 
 class SettingsFragment : Fragment() {
@@ -40,6 +29,7 @@ class SettingsFragment : Fragment() {
     private lateinit var _binding : FragmentSettingsBinding
     private lateinit var sharedPreferences : SharedPreferences
     private  lateinit var editor :SharedPreferences.Editor
+    val args : SettingsFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +47,10 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.i(TAG, "onViewCreated: ")
+
+
+        val testing = args.locationLatLng
+        Log.i(TAG, "onViewCreated: ${testing}  -yay")
 
         //to be optimized
         if(sharedPreferences.getBoolean("is_gps",true)){
@@ -115,7 +109,8 @@ class SettingsFragment : Fragment() {
 
                 val navController = Navigation.findNavController(requireActivity(),
                     R.id.nav_host_fragment_content_main)
-                navController.navigate(R.id.action_nav_settings_to_mapFragment)
+                val action = SettingsFragmentDirections.actionNavSettingsToMapFragment(true)
+                navController.navigate(action)
             }
             _binding.rbGps.id -> {
                 Log.i(TAG, "onRbClicked: rbGps")

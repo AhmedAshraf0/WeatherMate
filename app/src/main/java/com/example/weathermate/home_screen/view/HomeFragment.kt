@@ -39,6 +39,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import kotlinx.coroutines.flow.collectLatest
+import java.io.IOException
 import java.util.*
 
 
@@ -110,7 +111,6 @@ class HomeFragment : Fragment() {
         units: String? = null,
         lang: String? = null
     ) {
-        var weatherResponse: WeatherResponse? = null
 
         if (onlineData) {
             homeViewModel.getWeatherDetails(latitude!!, longitude!!, units!!, lang!!)
@@ -129,23 +129,29 @@ class HomeFragment : Fragment() {
                             )
 
                             _binding.weatherApiResponse = it.data
-                            weatherResponse = it.data
 
-                            val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                            val address = geocoder.getFromLocation(
-                                it.data.cityLatitude,
-                                it.data.cityLongitude,
-                                1
-                            ) as List<Address>
-
-                            //get the complete address
                             try {
+                                val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                                val address = geocoder.getFromLocation(
+                                    it.data.cityLatitude,
+                                    it.data.cityLongitude,
+                                    1
+                                ) as List<Address>
                                 //swap location from api to location from geocoder
-                                it.data.locationName = address.get(0).getAddressLine(0)
-                            }catch (e: IndexOutOfBoundsException){
+                                try{
+                                    if(address.get(0).getAddressLine(0).split(",").size > 1){
+                                        it.data.locationName = address.get(0).getAddressLine(0).split(",").get(1)
+                                    }else{
+                                        it.data.locationName = address.get(0).getAddressLine(0).split(",").get(0)
+                                    }
+                                }catch (e: IndexOutOfBoundsException){
+                                    it.data.locationName = "-"
+                                }
+                            }catch (e: IOException){
                                 it.data.locationName = "-"
-                                Log.i(TAG, "getWeatherDetails: ----${address.size}")
+                                Log.i(TAG, "getWeatherDetails: failed")
                             }
+
                             Log.i(TAG, "api: ${it.data.locationName}")
 
                             //ROOM
@@ -189,11 +195,8 @@ class HomeFragment : Fragment() {
                             _binding.weatherApiResponse = it.data
 
                             //Can be modified using data binding
-                            Log.i(TAG, "Room: ${it.data.locationName}")
+                            Log.i(TAG, "Room: ${it.data!!.locationName}")
                             _binding.tvCurrentLocation.text = it.data.locationName
-
-                            //can't remember way!
-                            weatherResponse = it.data
 
                             onResponseState(it.data)
                         }

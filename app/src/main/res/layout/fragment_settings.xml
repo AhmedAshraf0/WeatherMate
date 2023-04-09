@@ -6,7 +6,7 @@
     <data>
         <variable
             name="myFragment"
-            type="com.example.weathermate.settings.SettingsFragment" />
+            type="com.example.weathermate.settings.view.SettingsFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
