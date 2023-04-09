@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.weathermate.R
 import com.example.weathermate.databinding.FragmentAlertsDialogBinding
@@ -29,8 +30,8 @@ class AlertsDialogFragment : DialogFragment() {
     private var currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
     private var LimitDate = currentDate
     private var currentTime = "$hour:$minute"
-    private lateinit var alertTypes : Array<String>
-    var isAlarm : Boolean? = null
+    private lateinit var alertTypes: Array<String>
+    var isAlarm: Boolean? = null
     var selectTime = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +65,7 @@ class AlertsDialogFragment : DialogFragment() {
             resources.getStringArray(R.array.alert_types),
         )
 
-        _binding.dropMenu.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+        _binding.dropMenu.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
@@ -99,11 +100,13 @@ class AlertsDialogFragment : DialogFragment() {
         val datePickerDialog = DatePickerDialog(requireContext(), { _, year, month, day ->
             selectedDate.set(year, month, day)
 
-            if(textView.id == _binding.tvCurrentDate.id){
-                currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(selectedDate.time)
+            if (textView.id == _binding.tvCurrentDate.id) {
+                currentDate =
+                    SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(selectedDate.time)
                 textView.text = currentDate
-            }else{
-                LimitDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(selectedDate.time)
+            } else {
+                LimitDate =
+                    SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(selectedDate.time)
                 textView.text = LimitDate
             }
             Log.i(TAG, "showDatePicker: ${textView.text}")
@@ -124,28 +127,34 @@ class AlertsDialogFragment : DialogFragment() {
             },
             hour,
             minute,
-            false
+            true
         )
         timePicker.show()
     }
 
-    fun onRbClicked(view:View){
-        when(view.id){
-            _binding.radioButtonAlarm.id ->{
+    fun onRbClicked(view: View) {
+        when (view.id) {
+            _binding.radioButtonAlarm.id -> {
                 isAlarm = true
             }
-            _binding.radioButtonNotification.id ->{
+            _binding.radioButtonNotification.id -> {
                 isAlarm = false
             }
         }
     }
 
-    fun onBtnClicked(view:View){
-        if(isAlarm == true && selectTime){
+    fun onBtnClicked(view: View) {
+        if (isAlarm != null && selectTime) {
+            //create class for alarm data so room can use it too
             //save item and send it to viewmodel
             //insert in room
             //getList then upgrade ui
             //work alarm or notification
+            dismiss()
+        } else {
+            Toast.makeText(requireContext(),
+                "Please select an alarm & Time", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 

@@ -13,8 +13,8 @@ interface WeatherDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWeatherDetails(weatherResponse: WeatherResponse)
 
-    @Update
-    suspend fun updateWeatherDetails(weatherResponse: WeatherResponse) : Int
+    /*@Update
+    suspend fun updateWeatherDetails(weatherResponse: WeatherResponse) : Int*/
 
     @Query("SELECT * FROM favorites")
     fun getLocalFavDetails() : List<FavoriteWeatherResponse>

@@ -19,9 +19,9 @@ class ConcreteLocalSource(context: Context): LocalSource {
         weatherDao.insertWeatherDetails(weatherResponse)
     }
 
-    override suspend fun updateWeatherDetails(weatherResponse: WeatherResponse): Int {
+    /*override suspend fun updateWeatherDetails(weatherResponse: WeatherResponse): Int {
         return weatherDao.updateWeatherDetails(weatherResponse)
-    }
+    }*/
 
     override fun getLocalFavDetails(): List<FavoriteWeatherResponse> {
         return weatherDao.getLocalFavDetails()

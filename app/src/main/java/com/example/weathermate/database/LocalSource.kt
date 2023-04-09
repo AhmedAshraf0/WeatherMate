@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 interface LocalSource {
     fun getLocalWeatherDetails() : List<WeatherResponse>
     suspend fun insertWeatherDetails(weatherResponse: WeatherResponse)
-    suspend fun updateWeatherDetails(weatherResponse: WeatherResponse) : Int
+//    suspend fun updateWeatherDetails(weatherResponse: WeatherResponse) : Int
 
     fun getLocalFavDetails() : List<FavoriteWeatherResponse>
     suspend fun insertNewFavorite(favoriteWeatherResponse: FavoriteWeatherResponse)
