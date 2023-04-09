@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.weathermate.database.ConcreteLocalSource
 import com.example.weathermate.database.DbState
+import com.example.weathermate.database.WeatherDB
 import com.example.weathermate.databinding.FragmentHomeBinding
 import com.example.weathermate.dialog.MyDialogFragment
 import com.example.weathermate.home_screen.model.HomeRepository
@@ -77,7 +78,7 @@ class HomeFragment : Fragment() {
             HomeViewModelFactory(
                 HomeRepository.getInstance(
                     ConcreteRemoteSource(),
-                    ConcreteLocalSource(requireContext())
+                    ConcreteLocalSource(WeatherDB.getInstance(requireContext()).getWeatherDao())
                 )
             )
 

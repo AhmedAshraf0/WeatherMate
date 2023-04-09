@@ -21,6 +21,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.weathermate.R
 import com.example.weathermate.database.ConcreteLocalSource
 import com.example.weathermate.database.DbState
+import com.example.weathermate.database.WeatherDB
 import com.example.weathermate.databinding.FragmentFavoritesBinding
 import com.example.weathermate.favorites.model.FavoriteRepository
 import com.example.weathermate.favorites.viewmodel.FavoriteViewModel
@@ -60,7 +61,7 @@ class FavoritesFragment : Fragment() {
             FavoriteViewModelFactory(
                 FavoriteRepository.getInstance(
                     ConcreteRemoteSource(),
-                    ConcreteLocalSource(requireContext())
+                    ConcreteLocalSource(WeatherDB.getInstance(requireContext()).getWeatherDao())
                 )
             )
 

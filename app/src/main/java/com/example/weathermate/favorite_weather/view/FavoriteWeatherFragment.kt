@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.example.weathermate.database.ConcreteLocalSource
+import com.example.weathermate.database.WeatherDB
 import com.example.weathermate.databinding.FragmentFavoriteWeatherBinding
 import com.example.weathermate.home_screen.model.HomeRepository
 import com.example.weathermate.utilities.photos
@@ -65,7 +66,7 @@ class FavoriteWeatherFragment : Fragment() {
             HomeViewModelFactory(
                 HomeRepository.getInstance(
                     ConcreteRemoteSource(),
-                    ConcreteLocalSource(requireContext())
+                    ConcreteLocalSource(WeatherDB.getInstance(requireContext()).getWeatherDao())
                 )
             )
 
