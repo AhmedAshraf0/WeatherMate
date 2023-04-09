@@ -29,7 +29,7 @@ import com.example.weathermate.database.DbState
 import com.example.weathermate.databinding.FragmentHomeBinding
 import com.example.weathermate.dialog.MyDialogFragment
 import com.example.weathermate.home_screen.model.HomeRepository
-import com.example.weathermate.home_screen.model.photos
+import com.example.weathermate.utilities.photos
 import com.example.weathermate.home_screen.viewmodel.HomeViewModel
 import com.example.weathermate.home_screen.viewmodel.HomeViewModelFactory
 import com.example.weathermate.network.ApiState

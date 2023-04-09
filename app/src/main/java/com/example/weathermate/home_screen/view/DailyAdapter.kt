@@ -2,13 +2,12 @@ package com.example.weathermate.home_screen.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weathermate.R
 import com.example.weathermate.databinding.CardDayBinding
-import com.example.weathermate.home_screen.model.photos
+import com.example.weathermate.utilities.photos
 import com.example.weathermate.utilities.Converter
 import com.example.weathermate.weather_data_fetcher.DailyForecast
 import java.text.SimpleDateFormat

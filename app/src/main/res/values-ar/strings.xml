@@ -38,6 +38,24 @@
     <string name="mph">ميل/ساعة</string>
     <string name="pressure_unit">مبار</string>
     <string name="map_fragment">اختيار الموقع على الخريطة</string>
-
-
+    <string name="from">من:</string>
+    <string name="current_date">5-يناير-2023</string>
+    <string name="to">من:</string>
+    <string name="current_limit_date">25-ديسمبر-2023</string>
+    <string name="type">النوع:</string>
+    <string name="radio_button_alarm">منبه</string>
+    <string name="radio_button_notification">إشعار</string>
+    <string name="confirm">تأكيد</string>
+    <string name="at">في:</string>
+    <string-array name="alert_types">
+        <item>العواصف الرعدية</item>
+        <item>الإعصار</item>
+        <item>مراقبة الأعاصير</item>
+        <item>الفيضانات السريعة</item>
+        <item>العواصف الشتوية</item>
+        <item>الحرارة الشديدة</item>
+        <item>العواصف الاستوائية</item>
+        <item>الرياح العاتية</item>
+        <item>العواصف الثلجية</item>
+    </string-array>
 </resources>

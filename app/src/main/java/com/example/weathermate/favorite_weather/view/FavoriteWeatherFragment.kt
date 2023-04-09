@@ -20,7 +20,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.weathermate.database.ConcreteLocalSource
 import com.example.weathermate.databinding.FragmentFavoriteWeatherBinding
 import com.example.weathermate.home_screen.model.HomeRepository
-import com.example.weathermate.home_screen.model.photos
+import com.example.weathermate.utilities.photos
 import com.example.weathermate.home_screen.view.DailyAdapter
 import com.example.weathermate.home_screen.view.HourlyAdapter
 import com.example.weathermate.home_screen.viewmodel.HomeViewModel

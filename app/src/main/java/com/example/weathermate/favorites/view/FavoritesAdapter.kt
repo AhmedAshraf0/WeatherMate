@@ -10,15 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weathermate.R
 import com.example.weathermate.databinding.CardFavoriteBinding
 import com.example.weathermate.favorites.viewmodel.FavoriteViewModel
-import com.example.weathermate.home_screen.model.photos
+import com.example.weathermate.utilities.photos
 import com.example.weathermate.utilities.Converter
 import com.example.weathermate.weather_data_fetcher.FavoriteWeatherResponse
 import com.google.android.material.snackbar.Snackbar

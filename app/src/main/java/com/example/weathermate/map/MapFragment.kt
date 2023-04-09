@@ -73,10 +73,12 @@ class MapFragment : Fragment() , OnMapReadyCallback{
                     }catch (e:IOException){
                         Log.i(TAG, "onQueryTextSubmit: ${e.printStackTrace()}")
                     }
-                    val latLng = LatLng(addressList!!.get(0).latitude,addressList.get(0).longitude)
-                    marker.remove()
-                    map.addMarker(MarkerOptions().position(latLng))!!.title = searchResult
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10f))
+                    if(!addressList.isNullOrEmpty()){
+                        val latLng = LatLng(addressList.get(0).latitude,addressList.get(0).longitude)
+                        marker.remove()
+                        map.addMarker(MarkerOptions().position(latLng))!!.title = searchResult
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10f))
+                    }
                 }
 
                 return false

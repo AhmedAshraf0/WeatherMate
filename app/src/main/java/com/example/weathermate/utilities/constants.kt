@@ -1,4 +1,4 @@
-package com.example.weathermate.home_screen.model
+package com.example.weathermate.utilities
 
 import com.example.weathermate.R
 

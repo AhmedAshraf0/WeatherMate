@@ -14,7 +14,7 @@ import com.example.weathermate.R
 import com.example.weathermate.databinding.FragmentDialogBinding
 
 class MyDialogFragment : DialogFragment() {
-    lateinit var _binding: FragmentDialogBinding
+    private lateinit var _binding: FragmentDialogBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
