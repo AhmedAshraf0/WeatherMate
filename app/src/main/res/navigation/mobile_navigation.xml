@@ -7,19 +7,69 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.weathermate.ui.home.HomeFragment"
+        android:name="com.example.weathermate.home_screen.view.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.weathermate.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
+        android:id="@+id/nav_favs"
+        android:name="com.example.weathermate.favorites.view.FavoritesFragment"
+        android:label="@string/fragment_favorites"
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_nav_favs_to_mapFragment"
+            app:destination="@id/mapFragment" />
+        <action
+            android:id="@+id/action_nav_favs_to_favoriteWeatherFragment"
+            app:destination="@id/favoriteWeatherFragment" />
+        <argument
+            android:name="locationLatLong"
+            app:argType="string"
+            android:defaultValue="hi" />
+    </fragment>
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.weathermate.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_settings"
+        android:name="com.example.weathermate.settings.view.SettingsFragment"
+        android:label="@string/fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_nav_settings_to_mapFragment"
+            app:destination="@id/mapFragment" />
+        <argument
+            android:name="locationLatLng"
+            app:argType="string"
+            android:defaultValue="hi"/>
+    </fragment>
+    <fragment
+        android:id="@+id/nav_alerts"
+        android:name="com.example.weathermate.alerts.AlertsFragment"
+        android:label="@string/fragment_alerts"
+        tools:layout="@layout/fragment_alerts" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.example.weathermate.map.MapFragment"
+        android:label="@string/map_fragment"
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_mapFragment_to_nav_settings"
+            app:destination="@id/nav_settings" />
+        <argument
+            android:name="is_from_settings"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_mapFragment_to_nav_favs"
+            app:destination="@id/nav_favs" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteWeatherFragment"
+        android:name="com.example.weathermate.favorite_weather.view.FavoriteWeatherFragment"
+        android:label="@string/fragment_favorites"
+        tools:layout="@layout/fragment_favorite_weather" >
+        <action
+            android:id="@+id/action_favoriteWeatherFragment_to_nav_favs"
+            app:destination="@id/nav_favs" />
+        <argument
+            android:name="latlong"
+            app:argType="string" />
+    </fragment>
 </navigation>

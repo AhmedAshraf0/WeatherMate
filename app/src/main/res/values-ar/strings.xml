@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WeatherMate</string>
+    <string name="action_settings">الإعدادات</string>
+    <string name="menu_home">الشاشة الرئيسية</string>
+    <string name="today">اليوم</string>
+    <string name="feels_like">يشعر وكأنه</string>
+    <string name="hourly_forecast">توقعات الساعات القادمة</string>
+    <string name="next_days">السبعة أيام القادمة</string>
+    <string name="humidity">الرطوبة</string>
+    <string name="wind_speed">الرياح</string>
+    <string name="pressure">الضغط الجوي</string>
+    <string name="clouds">تغطية السحاب</string>
+    <string name="sunrise">الشروق</string>
+    <string name="sunset">الغروب</string>
+    <string name="menu_alerts">التنبيهات</string>
+    <string name="menu_favorites">المفضلة</string>
+    <string name="menu_settings">الإعدادات</string>
+    <string name="wind_unit">م/ث</string>
+    <string name="dialog_msg">نحتاج إلى موقعك لتقديم خدماتنا. هل تسمح لنا بالوصول إلى موقعك؟</string>
+    <string name="yes">نعم</string>
+    <string name="no">لا</string>
+    <string name="fragment_settings">الإعدادات</string>
+    <string name="fragment_alerts">التنبيهات</string>
+    <string name="fragment_favorites">المفضلة</string>
+    <string name="location">الموقع الحالي بواسطة</string>
+    <string name="map">الخريطة</string>
+    <string name="gps">جي بي إس</string>
+    <string name="temperature">درجة الحرارة</string>
+    <string name="celsius">مئوية\n، م/ث</string>
+    <string name="fahrenheit">فهرنهايت\n، ميل/ساعة</string>
+    <string name="kelvin">كيلفن\n، م/ث</string>
+    <string name="meter_sec">متر/ثانية\nم/ث</string>
+    <string name="arabic">العربية</string>
+    <string name="english">الإنجليزية</string>
+    <string name="language">اللغة</string>
+    <string name="windSpeed">سرعة الرياح</string>
+    <string name="mph">ميل/ساعة</string>
+    <string name="pressure_unit">مبار</string>
+    <string name="map_fragment">اختيار الموقع على الخريطة</string>
+    <string name="from">من:</string>
+    <string name="current_date">5-يناير-2023</string>
+    <string name="to">من:</string>
+    <string name="current_limit_date">25-ديسمبر-2023</string>
+    <string name="type">النوع:</string>
+    <string name="radio_button_alarm">منبه</string>
+    <string name="radio_button_notification">إشعار</string>
+    <string name="confirm">تأكيد</string>
+    <string name="at">في:</string>
+    <string-array name="alert_types">
+        <item>العواصف الرعدية</item>
+        <item>الإعصار</item>
+        <item>مراقبة الأعاصير</item>
+        <item>الفيضانات السريعة</item>
+        <item>العواصف الشتوية</item>
+        <item>الحرارة الشديدة</item>
+        <item>العواصف الاستوائية</item>
+        <item>الرياح العاتية</item>
+        <item>العواصف الثلجية</item>
+    </string-array>
+    <string name="wind_unit_2">ميل/ساعة</string>
+</resources>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_hourly"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_card"
+        app:cardBackgroundColor="@color/card_color"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/v_main_s_gl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.14" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/v_main_e_gl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.84" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/h_main_card_s_gl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="10dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/h_main_card_e_gl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_end="10dp" />
+
+            <TextView
+                android:id="@+id/day_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/rubik"
+                android:text="@string/day_date"
+                android:textColor="@color/grey"
+                app:layout_constraintStart_toEndOf="@id/v_main_s_gl"
+                app:layout_constraintTop_toBottomOf="@id/h_main_card_s_gl" />
+
+            <TextView
+                android:id="@+id/current_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/rubik"
+                android:text="@string/day_name"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@id/h_main_card_e_gl"
+                app:layout_constraintStart_toEndOf="@id/v_main_s_gl"
+                app:layout_constraintTop_toBottomOf="@id/day_date" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="end"
+                app:constraint_referenced_ids="current_day,day_date"
+                tools:layout_editor_absoluteX="33dp" />
+
+            <ImageView
+                android:id="@+id/day_status"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/daystatus"
+                app:layout_constraintBottom_toTopOf="@id/h_main_card_e_gl"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintStart_toEndOf="@id/barrier2"
+                app:layout_constraintTop_toBottomOf="@id/h_main_card_s_gl"
+                app:srcCompat="@mipmap/sun" />
+
+            <TextView
+                android:id="@+id/maxTemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:fontFamily="@font/rubik"
+                android:text="@string/current_degree"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/day_status"
+                app:layout_constraintEnd_toStartOf="@+id/maxTempDeg"
+                app:layout_constraintStart_toEndOf="@+id/guideline"
+                app:layout_constraintTop_toTopOf="@+id/day_status" />
+
+            <TextView
+                android:id="@+id/maxTempDeg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/rubik"
+                android:text="@string/degree_symbol"
+                android:textColor="@color/degree_type"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/h_main_card_e_gl"
+                app:layout_constraintEnd_toStartOf="@id/barrier3"
+                app:layout_constraintStart_toEndOf="@+id/maxTemp"
+                app:layout_constraintTop_toTopOf="@+id/h_main_card_s_gl" />
+
+            <TextView
+                android:id="@+id/minTemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/rubik"
+                android:text="@string/current_degree2"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/h_main_card_e_gl"
+                app:layout_constraintEnd_toEndOf="@+id/minTempDeg"
+                app:layout_constraintEnd_toStartOf="@+id/minTempDeg"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@+id/barrier3"
+                app:layout_constraintTop_toBottomOf="@id/h_main_card_s_gl" />
+
+            <TextView
+                android:id="@+id/minTempDeg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/rubik"
+                android:text="@string/degree_symbol"
+                android:textColor="@color/degree_type"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/h_main_card_e_gl"
+                app:layout_constraintEnd_toStartOf="@id/v_main_e_gl"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/minTemp"
+                app:layout_constraintTop_toTopOf="@+id/h_main_card_s_gl" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="end"
+                app:constraint_referenced_ids="maxTempDeg,maxTemp"
+                tools:layout_editor_absoluteX="166dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="218dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="myFragment"
+            type="com.example.weathermate.settings.view.SettingsFragment" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@color/main_color"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layoutDirection="ltr">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/v_gl_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.04136253" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/v_gl_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.96" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/h_gl_s"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="10dp" />
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="373dp"
+            android:layout_height="33dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/rubik"
+            android:text="@string/location"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="@+id/v_gl_start"
+            app:layout_constraintTop_toTopOf="@+id/h_gl_s" />
+
+        <RadioGroup
+            android:id="@+id/group_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
+            app:layout_constraintStart_toStartOf="@+id/v_gl_start"
+            app:layout_constraintTop_toBottomOf="@+id/tv_location">
+
+            <RadioButton
+                android:id="@+id/rb_gps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:gravity="center"
+                android:padding="14dp"
+                android:text="@string/gps"
+                android:textSize="18sp"
+                android:background="@drawable/radio_button_left_selector"
+                android:button="@android:color/transparent"
+                android:textColor="@color/main_color"
+                android:onClick="@{myFragment::onRbClicked}"/>
+
+            <RadioButton
+                android:id="@+id/rb_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:gravity="center"
+                android:padding="14dp"
+                android:text="@string/map"
+                android:textSize="18sp"
+                android:background="@drawable/radio_button_right_selector"
+                android:button="@android:color/transparent"
+                android:textColor="@color/degree_type"
+                android:onClick="@{myFragment::onRbClicked}"/>
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/tv_temperature"
+            android:layout_width="371dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/rubik"
+            android:text="@string/temperature"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/v_gl_start"
+            app:layout_constraintTop_toBottomOf="@+id/group_location" />
+
+        <RadioGroup
+            android:id="@+id/group_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
+            app:layout_constraintStart_toStartOf="@+id/v_gl_start"
+            app:layout_constraintTop_toBottomOf="@+id/tv_temperature">
+
+            <RadioButton
+                android:id="@+id/rb_celsius"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:gravity="center"
+                android:padding="14dp"
+                android:text="@string/celsius"
+                android:textSize="18sp"
+                android:background="@drawable/radio_button_left_selector"
+                android:button="@android:color/transparent"
+                android:textColor="@color/main_color"
+                android:onClick="@{myFragment::onRbClicked}"/>
+
+            <RadioButton
+                android:id="@+id/rb_fahrenheit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:gravity="center"
+                android:padding="14dp"
+                android:text="@string/fahrenheit"
+                android:textSize="18sp"
+                android:background="@drawable/radio_button_center_selector"
+                android:button="@android:color/transparent"
+                android:textColor="@color/degree_type"
+                android:onClick="@{myFragment::onRbClicked}"/>
+
+            <RadioButton
+                android:id="@+id/rb_kelvin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:gravity="center"
+                android:padding="14dp"
+                android:text="@string/kelvin"
+                android:textSize="18sp"
+                android:background="@drawable/radio_button_right_selector"
+                android:button="@android:color/transparent"
+                android:textColor="@color/degree_type"
+                android:onClick="@{myFragment::onRbClicked}"/>
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/tv_language"
+            android:layout_width="365dp"
+            android:layout_height="26dp"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/rubik"
+            android:text="@string/language"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/v_gl_start"
+            app:layout_constraintTop_toBottomOf="@+id/group_temperature" />
+
+        <RadioGroup
+            android:id="@+id/group_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
+            app:layout_constraintStart_toStartOf="@+id/v_gl_start"
+            app:layout_constraintTop_toBottomOf="@+id/tv_language">
+
+            <RadioButton
+                android:id="@+id/rb_en"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/english"
+                android:padding="14dp"
+                android:textSize="18sp"
+                android:checked="true"
+                android:background="@drawable/radio_button_left_selector"
+                android:button="@android:color/transparent"
+                android:textColor="@color/main_color"
+                android:onClick="@{myFragment::onRbClicked}"/>
+
+            <RadioButton
+                android:id="@+id/rb_ar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="14dp"
+                android:text="@string/arabic"
+                android:textSize="18sp"
+                android:checked="false"
+                android:button="@android:color/transparent"
+                android:background="@drawable/radio_button_right_selector"
+                android:textColor="@color/degree_type"
+                android:onClick="@{myFragment::onRbClicked}"/>
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/tv_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:text="@string/version"
+            android:textColor="@color/grey"
+            android:fontFamily="@font/rubik"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
+            app:layout_constraintStart_toStartOf="@+id/v_gl_start" />
+
+<!--
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/v_gl_end"
+            app:layout_constraintTop_toBottomOf="@+id/group_language">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipIcon="@drawable/baseline_gps_fixed_24"
+                app:chipBackgroundColor="@color/degree_type"
+                android:textColor="@color/main_color"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:text="GPS"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipIcon="@drawable/baseline_gps_fixed_24"
+                android:textColor="@color/main_color"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:text="GPS"/>
+        </com.google.android.material.chip.ChipGroup>
+-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
