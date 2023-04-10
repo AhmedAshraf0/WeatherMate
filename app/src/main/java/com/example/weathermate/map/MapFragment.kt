@@ -19,6 +19,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.weathermate.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -135,7 +136,9 @@ class MapFragment : Fragment() , OnMapReadyCallback{
     @Suppress("MissingPermission")
     private fun getCurrentLocation() {
         Log.i(TAG, "requestNewLocationData: ")
-        client.lastLocation.addOnSuccessListener { location: Location? ->
+        client.getCurrentLocation(
+            Priority.PRIORITY_HIGH_ACCURACY, null
+        ).addOnSuccessListener { location: Location? ->
             Log.i(TAG, "getCurrentLocation: success")
             if (location != null) {
                 supportMapFragment.getMapAsync {
