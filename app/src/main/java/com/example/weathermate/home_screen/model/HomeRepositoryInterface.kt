@@ -14,5 +14,5 @@ interface HomeRepositoryInterface {
 
     fun getLocalWeatherDetails() : Flow<List<WeatherResponse>>
     suspend fun insertWeatherDetails(weatherResponse: WeatherResponse)
-    suspend fun updateWeatherDetails(weatherResponse: WeatherResponse) : Int
+//    suspend fun updateWeatherDetails(weatherResponse: WeatherResponse) : Int
 }

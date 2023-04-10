@@ -67,10 +67,10 @@ class HomeViewModel(
         }
     }
 
-    fun updateWeatherDetails(weatherResponse: WeatherResponse) {
+    /*fun updateWeatherDetails(weatherResponse: WeatherResponse) {
         viewModelScope.launch(Dispatchers.IO) {
             _repo.updateWeatherDetails(weatherResponse)
         }
-    }
+    }*/
 
 }

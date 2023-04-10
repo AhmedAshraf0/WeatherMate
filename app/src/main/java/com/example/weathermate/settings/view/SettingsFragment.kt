@@ -18,9 +18,12 @@ import com.example.weathermate.R
 import com.example.weathermate.databinding.FragmentSettingsBinding
 import java.util.*
 import android.content.res.*
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.text.TextUtils
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 
 
 class SettingsFragment : Fragment() {
@@ -30,12 +33,13 @@ class SettingsFragment : Fragment() {
     private lateinit var sharedPreferences : SharedPreferences
     private  lateinit var editor :SharedPreferences.Editor
     val args : SettingsFragmentArgs by navArgs()
+    private var isSTart : Boolean? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        isSTart = true
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container, false)
         _binding.myFragment = this
 
@@ -58,9 +62,9 @@ class SettingsFragment : Fragment() {
             switchToGps()
         }else{
             Log.i(TAG, "onViewCreated: f")
-            switchToMap()
 
-            if(checkPermissions()){
+            if(checkPermissions() && checkForInternet(requireActivity())){
+                switchToMap()
             }else{
                 requestPermissions()
             }
@@ -81,16 +85,15 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        //---------To upgrade ui
-
-        /*if(sharedPreferences.getString("lang","non").equals("en")){
+        if(sharedPreferences.getString("lang","en").equals("en")){
             Log.i(TAG, "onViewCreated: en in lang")
-            switchToEn()
-        }else if(sharedPreferences.getString("lang","non").equals("ar")){
-            switchToAr()
+            switchToEn(isSTart!!)
+        }else if(sharedPreferences.getString("lang","en").equals("ar")){
+            Log.i(TAG, "onViewCreated: ar in lang")
+            switchToAr(isSTart!!)
         }else{
             Log.i(TAG, "onViewCreated: e in lang")
-        }*/
+        }
     }
     fun onRbClicked(view: View){
         //--------units-----
@@ -105,12 +108,17 @@ class SettingsFragment : Fragment() {
         when(view.id){
             _binding.rbMap.id -> {
                 Log.i(TAG, "onRbClicked: rbMap")
-                switchToMap()
 
-                val navController = Navigation.findNavController(requireActivity(),
-                    R.id.nav_host_fragment_content_main)
-                val action = SettingsFragmentDirections.actionNavSettingsToMapFragment(true)
-                navController.navigate(action)
+                if(checkPermissions()&&checkForInternet(requireActivity())){
+                    switchToMap()
+                    val navController = Navigation.findNavController(requireActivity(),
+                        R.id.nav_host_fragment_content_main)
+                    val action = SettingsFragmentDirections.actionNavSettingsToMapFragment(true)
+                    navController.navigate(action)
+                }else{
+                    switchToGps()
+                    Snackbar.make(view, "Check internet and GPS", Snackbar.LENGTH_LONG).show()
+                }
             }
             _binding.rbGps.id -> {
                 Log.i(TAG, "onRbClicked: rbGps")
@@ -138,7 +146,7 @@ class SettingsFragment : Fragment() {
                 if(sharedPreferences.getString("lang","en").equals("ar")){
                     Log.i(TAG, "onRbClicked: in if")
 
-                    switchToEn()
+                    switchToEn(false)
                     /*val navController = Navigation.findNavController(requireActivity(),
                         R.id.nav_host_fragment_content_main)
                     navController.navigate(R.id.action_nav_settings_self)*/
@@ -150,7 +158,7 @@ class SettingsFragment : Fragment() {
                 if(sharedPreferences.getString("lang","en").equals("en")){
                     Log.i(TAG, "onRbClicked: in if")
 
-                    switchToAr()
+                    switchToAr(false)
                     /*val navController = Navigation.findNavController(requireActivity(),
                         R.id.nav_host_fragment_content_main)
                     navController.navigate(R.id.action_nav_settings_self)*/
@@ -166,75 +174,83 @@ class SettingsFragment : Fragment() {
     }
 
     private fun switchToGps(){
-        _binding.rbGps.isSelected = true
+        _binding.rbGps.isChecked = true
         _binding.rbGps.setTextColor(ContextCompat.getColor(requireContext(),R.color.main_color))
-        _binding.rbMap.isSelected = false
+        _binding.rbMap.isChecked = false
         _binding.rbMap.setTextColor(ContextCompat.getColor(requireContext(),R.color.degree_type))
         editor.putBoolean("is_gps",true)
         editor.apply()
     }
     private fun switchToMap(){
-        _binding.rbGps.isSelected = false
+        _binding.rbGps.isChecked = false
         _binding.rbGps.setTextColor(ContextCompat.getColor(requireContext(),R.color.degree_type))
-        _binding.rbMap.isSelected = true
+        _binding.rbMap.isChecked = true
         _binding.rbMap.setTextColor(ContextCompat.getColor(requireContext(),R.color.main_color))
         editor.putBoolean("is_gps",false)
         editor.apply()
     }
     private fun switchToCelsius(){
         //unchecked rbFahrenheit & rbKelvin
-        _binding.rbFahrenheit.isSelected = false
+        _binding.rbFahrenheit.isChecked = false
         _binding.rbFahrenheit.setTextColor(ContextCompat.getColor(requireContext(),R.color.degree_type))
-        _binding.rbKelvin.isSelected = false
+        _binding.rbKelvin.isChecked = false
         _binding.rbKelvin.setTextColor(ContextCompat.getColor(requireContext(),R.color.degree_type))
 
 
         //checked rbCelsius
-        _binding.rbCelsius.isSelected = true
+        _binding.rbCelsius.isChecked = true
         _binding.rbCelsius.setTextColor(ContextCompat.getColor(requireContext(),R.color.main_color))
         editor.putString("units","metric")
         editor.apply()
     }
     private fun switchToFahrenheit(){
-        _binding.rbCelsius.isSelected = false
+        _binding.rbCelsius.isChecked = false
         _binding.rbCelsius.setTextColor(ContextCompat.getColor(requireContext(),R.color.degree_type))
-        _binding.rbKelvin.isSelected = false
+        _binding.rbKelvin.isChecked = false
         _binding.rbKelvin.setTextColor(ContextCompat.getColor(requireContext(),R.color.degree_type))
 
-        _binding.rbFahrenheit.isSelected = true
+        _binding.rbFahrenheit.isChecked = true
         _binding.rbFahrenheit.setTextColor(ContextCompat.getColor(requireContext(),R.color.main_color))
         editor.putString("units","imperial")
         editor.apply()
     }
     private fun switchToKelvin(){
-        _binding.rbCelsius.isSelected = false
+        _binding.rbCelsius.isChecked = false
         _binding.rbCelsius.setTextColor(ContextCompat.getColor(requireContext(),R.color.degree_type))
-        _binding.rbFahrenheit.isSelected = false
+        _binding.rbFahrenheit.isChecked = false
         _binding.rbFahrenheit.setTextColor(ContextCompat.getColor(requireContext(),R.color.degree_type))
 
-        _binding.rbKelvin.isSelected = true
+        _binding.rbKelvin.isChecked = true
         _binding.rbKelvin.setTextColor(ContextCompat.getColor(requireContext(),R.color.main_color))
         editor.putString("units","standard")
         editor.apply()
     }
-    private fun switchToEn(){
-        _binding.rbAr.isSelected = false
+    private fun switchToEn(flag:Boolean){
+        _binding.rbAr.isChecked = false
         _binding.rbAr.setTextColor(ContextCompat.getColor(requireContext(),R.color.degree_type))
 
-        setLocal("en")
+        if(!flag){
+            setLocal("en")
+        }else{
+            isSTart = false
+        }
 
-        _binding.rbEn.isSelected = true
+        _binding.rbEn.isChecked = true
         _binding.rbEn.setTextColor(ContextCompat.getColor(requireContext(),R.color.main_color))
         editor.putString("lang","en")
         editor.apply()
     }
-    private fun switchToAr() {
-        _binding.rbEn.isSelected = false
+    private fun switchToAr(flag:Boolean) {
+        _binding.rbEn.isChecked = false
         _binding.rbEn.setTextColor(ContextCompat.getColor(requireContext(),R.color.degree_type))
 
-        setLocal("ar")
+        if(!flag){
+            setLocal("ar")
+        }else{
+            isSTart = false
+        }
 
-        _binding.rbAr.isSelected = true
+        _binding.rbAr.isChecked = true
         _binding.rbAr.setTextColor(ContextCompat.getColor(requireContext(),R.color.main_color))
         editor.putString("lang","ar")
         editor.apply()
@@ -288,17 +304,28 @@ class SettingsFragment : Fragment() {
         //at this function the prompt is displayed and to check on the action of it
         //through this callback fun onRequestPermissionsResult()
     }
+    private fun checkForInternet(context: Context): Boolean {
+        //connectivityManager to get system services so i can know network connections
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == PERMISSION_ID){
-            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
+            val network = connectivityManager.activeNetwork ?: return false
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return when {
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+                else -> false
             }
+        } else {
+            @Suppress("DEPRECATION") val networkInfo =
+                connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
         }
     }
 }
