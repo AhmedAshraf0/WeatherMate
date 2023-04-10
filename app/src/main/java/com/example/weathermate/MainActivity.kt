@@ -26,10 +26,26 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var sharedPreferences: SharedPreferences
 
+    var layoutDirection:Int?= null
+    companion object{
+        var isOpened=false;
+    }
+    override fun attachBaseContext(newBase: Context?) {
+        if (newBase != null && !isOpened) {
+            sharedPreferences = getSharedPreferences(newBase)
+            setLocal(sharedPreferences.getString("lang","en")!!, newBase)
+            isOpened=true
+        }
+        super.attachBaseContext(newBase)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i("Home", "onCreate: ")
+
+        if (layoutDirection!=null)
+            window.decorView.layoutDirection = layoutDirection!!
 
         //should be before binding
         val sharedPreferences = getSharedPreferences(this)
@@ -81,6 +97,24 @@ class MainActivity : AppCompatActivity() {
 
     private fun getSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences("weather_prefs", Context.MODE_PRIVATE)
+    }
+
+    private fun setLocal(lang : String, context:Context){
+        val local = Locale(lang)
+        Locale.setDefault(local)
+        val config = Configuration()
+        config.setLocale(local)
+        context.resources.updateConfiguration(config,context.resources.displayMetrics)
+
+        layoutDirection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            if (TextUtils.getLayoutDirectionFromLocale(local) == View.LAYOUT_DIRECTION_RTL) {
+                View.LAYOUT_DIRECTION_RTL
+            } else {
+                View.LAYOUT_DIRECTION_LTR
+            }
+        } else {
+            View.LAYOUT_DIRECTION_LTR
+        }
     }
 
 }

@@ -1,7 +1,9 @@
 package com.example.weathermate.favorites.view
 
+import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.net.ConnectivityManager
@@ -13,6 +15,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -30,6 +33,7 @@ import com.example.weathermate.map.MapFragment
 import com.example.weathermate.network.ApiState
 import com.example.weathermate.network.ConcreteRemoteSource
 import com.example.weathermate.weather_data_fetcher.FavoriteWeatherResponse
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -83,7 +87,7 @@ class FavoritesFragment : Fragment() {
             "stack: ${findNavController().previousBackStackEntry?.destination?.id}\n${R.id.mapFragment}"
         )
         if(args.locationLatLong != "hi" && MapFragment.isFromMap){
-            if(checkForInternet(requireContext())){
+            if(checkForInternet(requireContext()) && checkPermissions()){
                 MapFragment.isFromMap =false
                 getWeatherDetails(
                     args.locationLatLong.split(",").get(0).toDouble(),
@@ -92,6 +96,8 @@ class FavoritesFragment : Fragment() {
                     sharedPreferences.getString("lang","en")!!,
                     "minutely,hourly,daily,alerts"
                 )
+            }else{
+                Snackbar.make(view, "Check internet & GPS", Snackbar.LENGTH_LONG).show()
             }
         }
         favoriteViewModel.getLocalFavDetails()
@@ -244,5 +250,31 @@ class FavoritesFragment : Fragment() {
             }
         }
         Log.i(TAG, "getLocalWeatherDetails: fun done")
+    }
+
+    private fun checkPermissions(): Boolean {
+        Log.i(TAG, "checkPermissions: ")
+        return ActivityCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+    private fun requestPermissions() {
+        Log.i(TAG, "requestPermissions: ")
+        //define permissions i want to check and custom unique permission id
+
+        //if from activity compat onRequestPermissionsResult is not called and i need it
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ),
+            10
+        )
+        //at this function the prompt is displayed and to check on the action of it
+        //through this callback fun onRequestPermissionsResult()
     }
 }

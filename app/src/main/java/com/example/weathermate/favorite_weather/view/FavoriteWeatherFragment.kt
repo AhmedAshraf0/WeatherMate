@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import com.example.weathermate.R
 import com.example.weathermate.database.ConcreteLocalSource
 import com.example.weathermate.database.WeatherDB
 import com.example.weathermate.databinding.FragmentFavoriteWeatherBinding
@@ -97,6 +98,11 @@ class FavoriteWeatherFragment : Fragment() {
             favoriteWeatherVm.retrofitStateFlow.collectLatest {
                 when (it) {
                     is ApiState.Success -> {
+                        if(units == "imperial"){
+                            _binding.windValPer.text = getString(R.string.wind_unit_2)
+                        }else{
+                            _binding.windValPer.text = getString(R.string.wind_unit)
+                        }
                         //i want to make sure that user received data at least once
                         //to avoid errors
                         Log.i(

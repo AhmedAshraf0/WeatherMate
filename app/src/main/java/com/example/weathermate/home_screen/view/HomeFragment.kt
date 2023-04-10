@@ -24,6 +24,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.weathermate.R
 import com.example.weathermate.database.ConcreteLocalSource
 import com.example.weathermate.database.DbState
 import com.example.weathermate.database.WeatherDB
@@ -39,6 +40,7 @@ import com.example.weathermate.weather_data_fetcher.WeatherResponse
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import java.io.IOException
 import java.util.*
@@ -91,8 +93,13 @@ class HomeFragment : Fragment() {
             Log.i(TAG, "checkForInternet: no")
 
             if (sharedPreferences.getInt("first_time", -2) == 1) {
-                //---To-Do---------show snakebar requrie wifi
+                //---To-Do---------show snackbar require wifi
                 Log.i(TAG, "onCreateView: closing app")
+                Snackbar.make(requireView(), "Check your internet connection", Snackbar.LENGTH_LONG).show()
+
+                val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
+                startActivity(intent)
+
                 activity?.finishAffinity()
             } else if (sharedPreferences.getInt("first_time", -2) == -1) {
                 //get data from room
@@ -120,6 +127,11 @@ class HomeFragment : Fragment() {
                 homeViewModel.retrofitStateFlow.collectLatest {
                     when (it) {
                         is ApiState.Success -> {
+                            if(units == "imperial"){
+                                _binding.windValPer.text = getString(R.string.wind_unit_2)
+                            }else{
+                                _binding.windValPer.text = getString(R.string.wind_unit)
+                            }
                             //i want to make sure that user received data at least once
                             //to avoid errors
                             editor.putBoolean("succeed_once", true)
@@ -187,6 +199,11 @@ class HomeFragment : Fragment() {
                 }
             }
         } else {
+            if(units == "imperial"){
+                _binding.windValPer.text = getString(R.string.wind_unit_2)
+            }else{
+                _binding.windValPer.text = getString(R.string.wind_unit)
+            }
             homeViewModel.getLocalWeatherDetails()
 
             lifecycleScope.launchWhenStarted {

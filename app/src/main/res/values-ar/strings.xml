@@ -27,9 +27,9 @@
     <string name="map">الخريطة</string>
     <string name="gps">جي بي إس</string>
     <string name="temperature">درجة الحرارة</string>
-    <string name="celsius">درجة مئوية\n، م/ث</string>
-    <string name="fahrenheit">درجة فهرنهايت\n، ميل/ساعة</string>
-    <string name="kelvin">درجة كيلفن\n، م/ث</string>
+    <string name="celsius">مئوية\n، م/ث</string>
+    <string name="fahrenheit">فهرنهايت\n، ميل/ساعة</string>
+    <string name="kelvin">كيلفن\n، م/ث</string>
     <string name="meter_sec">متر/ثانية\nم/ث</string>
     <string name="arabic">العربية</string>
     <string name="english">الإنجليزية</string>
@@ -58,4 +58,5 @@
         <item>الرياح العاتية</item>
         <item>العواصف الثلجية</item>
     </string-array>
+    <string name="wind_unit_2">ميل/ساعة</string>
 </resources>

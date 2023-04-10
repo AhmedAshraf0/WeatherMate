@@ -12,7 +12,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:background="@color/main_color"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layoutDirection="ltr">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/v_gl_start"
@@ -37,8 +38,8 @@
 
         <TextView
             android:id="@+id/tv_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="373dp"
+            android:layout_height="33dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/rubik"
             android:text="@string/location"
@@ -61,35 +62,35 @@
                 android:id="@+id/rb_gps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/radio_button_left_selector"
-                android:button="@android:color/transparent"
                 android:checked="true"
                 android:gravity="center"
                 android:padding="14dp"
                 android:text="@string/gps"
+                android:textSize="18sp"
+                android:background="@drawable/radio_button_left_selector"
+                android:button="@android:color/transparent"
                 android:textColor="@color/main_color"
-                android:textSize="20sp"
                 android:onClick="@{myFragment::onRbClicked}"/>
 
             <RadioButton
                 android:id="@+id/rb_map"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/radio_button_right_selector"
-                android:button="@android:color/transparent"
                 android:checked="false"
                 android:gravity="center"
                 android:padding="14dp"
                 android:text="@string/map"
+                android:textSize="18sp"
+                android:background="@drawable/radio_button_right_selector"
+                android:button="@android:color/transparent"
                 android:textColor="@color/degree_type"
-                android:textSize="20sp"
                 android:onClick="@{myFragment::onRbClicked}"/>
         </RadioGroup>
 
         <TextView
             android:id="@+id/tv_temperature"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="371dp"
+            android:layout_height="38dp"
             android:layout_marginTop="32dp"
             android:fontFamily="@font/rubik"
             android:text="@string/temperature"
@@ -114,49 +115,49 @@
                 android:id="@+id/rb_celsius"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/radio_button_left_selector"
-                android:button="@android:color/transparent"
                 android:checked="true"
                 android:gravity="center"
                 android:padding="14dp"
                 android:text="@string/celsius"
+                android:textSize="18sp"
+                android:background="@drawable/radio_button_left_selector"
+                android:button="@android:color/transparent"
                 android:textColor="@color/main_color"
-                android:textSize="20sp"
                 android:onClick="@{myFragment::onRbClicked}"/>
 
             <RadioButton
                 android:id="@+id/rb_fahrenheit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/radio_button_center_selector"
-                android:button="@android:color/transparent"
                 android:checked="false"
                 android:gravity="center"
                 android:padding="14dp"
                 android:text="@string/fahrenheit"
+                android:textSize="18sp"
+                android:background="@drawable/radio_button_center_selector"
+                android:button="@android:color/transparent"
                 android:textColor="@color/degree_type"
-                android:textSize="20sp"
                 android:onClick="@{myFragment::onRbClicked}"/>
 
             <RadioButton
                 android:id="@+id/rb_kelvin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/radio_button_right_selector"
-                android:button="@android:color/transparent"
                 android:checked="false"
                 android:gravity="center"
                 android:padding="14dp"
                 android:text="@string/kelvin"
+                android:textSize="18sp"
+                android:background="@drawable/radio_button_right_selector"
+                android:button="@android:color/transparent"
                 android:textColor="@color/degree_type"
-                android:textSize="20sp"
                 android:onClick="@{myFragment::onRbClicked}"/>
         </RadioGroup>
 
         <TextView
             android:id="@+id/tv_language"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="365dp"
+            android:layout_height="26dp"
             android:layout_marginTop="32dp"
             android:fontFamily="@font/rubik"
             android:text="@string/language"
@@ -182,13 +183,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:button="@android:color/transparent"
                 android:text="@string/english"
                 android:padding="14dp"
-                android:textSize="20sp"
-                android:textColor="@color/main_color"
+                android:textSize="18sp"
                 android:checked="true"
                 android:background="@drawable/radio_button_left_selector"
+                android:button="@android:color/transparent"
+                android:textColor="@color/main_color"
                 android:onClick="@{myFragment::onRbClicked}"/>
 
             <RadioButton
@@ -197,12 +198,12 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="14dp"
-                android:button="@android:color/transparent"
                 android:text="@string/arabic"
-                android:textColor="@color/degree_type"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:checked="false"
+                android:button="@android:color/transparent"
                 android:background="@drawable/radio_button_right_selector"
+                android:textColor="@color/degree_type"
                 android:onClick="@{myFragment::onRbClicked}"/>
         </RadioGroup>
 
